@@ -1,0 +1,117 @@
+.blackjack-container {
+    text-align: center;
+    padding: 2rem;
+    background-color: #1a1a2e;
+    color: #e0f7fa;
+    min-height: 100vh;
+}
+
+.blackjack-subtitle {
+    font-size: 1.2rem;
+    color: #a8dadc;
+    margin-bottom: 1.5rem;
+}
+
+.blackjack-display {
+    background-color: #0f3460;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 0.5rem auto;
+    color: #e94560;
+    font-weight: bold;
+    font-size: 1.1rem;
+    max-width: 600px;
+}
+
+.blackjack-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.blackjack-button,
+.blackjack-reset-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.blackjack-button {
+    background-color: #e94560;
+    color: #ffffff;
+}
+
+.blackjack-button:hover {
+    background-color: #d73750;
+}
+
+.blackjack-reset-button {
+    background-color: #00ffd1;
+    color: #1a1a2e;
+}
+
+.blackjack-reset-button:hover {
+    background-color: #00c9a7;
+}
+
+.blackjack-info-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.blackjack-card,
+.blackjack-chart {
+    background-color: #0f3460;
+    padding: 1.5rem;
+    border-radius: 12px;
+    flex: 1;
+    max-width: 350px;
+    min-width: 280px;
+}
+
+.blackjack-title {
+    font-size: 1.3rem;
+    color: #e94560;
+    margin-bottom: 1rem;
+}
+
+.blackjack-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.blackjack-table th,
+.blackjack-table td {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #e0f7fa;
+    word-break: break-word;
+}
+
+.blackjack-table th {
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .blackjack-info-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .blackjack-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -1,0 +1,168 @@
+/* Reset básico */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #1A1A2E;
+    color: #E5E5E5;
+    line-height: 1.6;
+}
+
+/* Container principal */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Cabeçalho */
+.main-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.main-header h1 {
+    font-size: 2.5rem;
+    color: #00FFD1;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #A8DADC;
+    text-align: center;
+}
+
+/* Grid de conteúdo */
+.content-grid {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+}
+
+/* Cards de conteúdo */
+.content-card {
+    background: #0F3460;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.content-card h2 {
+    font-size: 1.5rem;
+    color: #E94560;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.content-card p {
+    color: #A8DADC;
+    margin-bottom: 1rem;
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* Foto da equipe */
+.team-photo {
+    margin-top: auto;
+}
+
+.team-photo img {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #E94560;
+}
+
+/* Navegação de jogos */
+.games-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.game-link {
+    background: #E94560;
+    color: #FFFFFF;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.game-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 2rem;
+    }
+
+    .content-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-column {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .content-card {
+        max-width: 100%;
+    }
+
+    .game-link {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .content-card {
+        padding: 1rem;
+    }
+}
