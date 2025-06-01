@@ -9,6 +9,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import '../Common.css';
 import './Blackjack.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
@@ -49,7 +50,6 @@ const Blackjack: React.FC = () => {
         }
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const autoPlayDealer = () => {
         let dealerTotal = sumCards(dealerCards);
         const dealerNewCards = [...dealerCards];
@@ -83,7 +83,7 @@ const Blackjack: React.FC = () => {
             }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [autoPlayDealer, isDealerTurn, playerCards]);
+    }, [isDealerTurn, playerCards]);
 
     const endGame = (resultMessage: string, resultKey: 'wins' | 'losses' | 'ties') => {
         setIsGameOver(true);
@@ -98,9 +98,11 @@ const Blackjack: React.FC = () => {
             {
                 label: 'Resultados',
                 data: [stats.wins, stats.losses, stats.ties],
-                backgroundColor: ['#00ffd1', '#e94560', '#3a86ff']
-            }
-        ]
+                backgroundColor: ['#00FFD1', '#E94560', '#A8DADC'],
+                borderColor: '#1A1A2E',
+                borderWidth: 2,
+            },
+        ],
     };
 
     const dataPie = {
@@ -108,66 +110,79 @@ const Blackjack: React.FC = () => {
         datasets: [
             {
                 data: [stats.wins, stats.losses, stats.ties],
-                backgroundColor: ['#00ffd1', '#e94560', '#3a86ff']
-            }
-        ]
+                backgroundColor: ['#00FFD1', '#E94560', '#A8DADC'],
+                borderColor: '#1A1A2E',
+                borderWidth: 2,
+            },
+        ],
     };
 
     return (
-        <div className="blackjack-container">
-            <p className="blackjack-subtitle">Tenta vencer o dealer sem passar dos 21 pontos</p>
+        <div className="page-container">
+            <nav className="navigation-bar">
+                <button onClick={() => window.history.back()} className="nav-button">
+                    Voltar
+                </button>
+            </nav>
 
-            {gameStarted && (
-                <>
-                    <div className="blackjack-display">
-                        <p>As tuas cartas: {playerCards.join(', ')} ({sumCards(playerCards)})</p>
-                    </div>
-
-                    <div className="blackjack-display">
-                        <p>Cartas do Dealer: {isGameOver ? `${dealerCards.join(', ')} (${sumCards(dealerCards)})` : `${dealerCards[0]}, (?)`}</p>
-                    </div>
-                </>
-            )}
-
-            {message && <p className="blackjack-subtitle">{message}</p>}
-
-            <div className="blackjack-buttons">
-                <button className="blackjack-button" onClick={hit} disabled={!gameStarted || isGameOver}>Pedir Carta</button>
-                <button className="blackjack-button" onClick={stand} disabled={!gameStarted || isGameOver}>Parar</button>
-                <button className="blackjack-reset-button" onClick={startGame}>Novo Jogo</button>
+            <div className="main-header">
+                <h1>Jogo de Blackjack</h1>
+                <p className="subtitle">Tenta vencer o dealer sem passar dos 21 pontos!</p>
             </div>
 
-            <div className="blackjack-info-section">
-                <div className="blackjack-card">
-                    <h2 className="blackjack-title">Estatísticas</h2>
-                    <table className="blackjack-table">
+            <div className="game-container">
+                {gameStarted && (
+                    <>
+                        <div className="game-display">
+                            <p>As tuas cartas: {playerCards.join(', ')} ({sumCards(playerCards)})</p>
+                        </div>
+                        <div className="game-display">
+                            <p>Cartas do Dealer: {isGameOver ? `${dealerCards.join(', ')} (${sumCards(dealerCards)})` : `${dealerCards[0]}, (?)`}</p>
+                        </div>
+                    </>
+                )}
+                {message && <p className="last-result">{message}</p>}
+            </div>
+
+            <div className="action-buttons">
+                <button className="action-button" onClick={hit} disabled={!gameStarted || isGameOver}>
+                    Pedir Carta
+                </button>
+                <button className="action-button" onClick={stand} disabled={!gameStarted || isGameOver}>
+                    Parar
+                </button>
+                <button className="reset-button" onClick={startGame}>
+                    Novo Jogo
+                </button>
+            </div>
+
+            <div className="content-container">
+                <div className="chart-card">
+                    <h2>Gráfico de Barras</h2>
+                    <Bar data={dataBar} />
+                    <div className="total-spins">Total de jogos: {stats.wins + stats.losses + stats.ties}</div>
+                </div>
+
+                <div className="chart-card">
+                    <h2>Gráfico Circular</h2>
+                    <Pie data={dataPie} />
+                </div>
+
+                <div className="table-card">
+                    <h2>Estatísticas</h2>
+                    <table className="result-table">
                         <thead>
                             <tr>
-                                <th>Total Jogos</th>
-                                <th>Vitórias</th>
-                                <th>Derrotas</th>
-                                <th>Empates</th>
+                                <th>Resultado</th>
+                                <th>Contagem</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{stats.wins + stats.losses + stats.ties}</td>
-                                <td>{stats.wins}</td>
-                                <td>{stats.losses}</td>
-                                <td>{stats.ties}</td>
-                            </tr>
+                            <tr><td>Vitórias</td><td>{stats.wins}</td></tr>
+                            <tr><td>Derrotas</td><td>{stats.losses}</td></tr>
+                            <tr><td>Empates</td><td>{stats.ties}</td></tr>
                         </tbody>
                     </table>
-                </div>
-
-                <div className="blackjack-chart">
-                    <h2 className="blackjack-title">Gráfico de Barras</h2>
-                    <Bar data={dataBar} />
-                </div>
-
-                <div className="blackjack-chart">
-                    <h2 className="blackjack-title">Gráfico de Pizza</h2>
-                    <Pie data={dataPie} />
                 </div>
             </div>
         </div>
