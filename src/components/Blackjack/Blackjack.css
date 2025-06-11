@@ -1,0 +1,11 @@
+.game-display {
+    background-color: #0F3460;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 0.5rem auto;
+    color: #E94560;
+    font-weight: bold;
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: center;
+}

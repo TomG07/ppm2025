@@ -1,33 +1,80 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend } from "chart.js";
-import '../Common.css';
+import '../../Common.css';
 import "./Dados.css";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
 
-export default function Dados() {
+// Caminhos para as imagens png dos dados
+// Assume-se que estes ficheiros estão em public/images/dados/
+const DICE_IMAGES: { [key: number]: string } = {
+    1: '/images/dice-1.png',
+    2: '/images/dice-2.png',
+    3: '/images/dice-3.png',
+    4: '/images/dice-4.png',
+    5: '/images/dice-5.png',
+    6: '/images/dice-6.png',
+};
+
+const Dados: React.FC = () => { // Usar React.FC para consistência
     const [resultados, setResultados] = useState<number[]>([]);
     const [lancando, setLancando] = useState(false);
     const [numeroAtual, setNumeroAtual] = useState<number | null>(null);
+    const [displayNumero, setDisplayNumero] = useState<number | null>(null); // Número a exibir no dado (para animação)
 
-    const lancarDado = () => {
+    // Referências para os elementos de áudio (assumindo que estão em public/sounds/)
+    const rollSound = useRef(new Audio('/sounds/dice_roll.wav')); // Novo som para rolar
+
+    // Função auxiliar para tocar som
+    const playSound = useCallback((audioElement: HTMLAudioElement) => {
+        audioElement.currentTime = 0; // Reset para poder tocar rapidamente
+        audioElement.play().catch(e => console.error("Erro ao tocar som:", e));
+    }, []);
+
+    // Função para lançar o dado com animação e sons
+    const lancarDado = useCallback(() => {
+        if (lancando) return;
+
         setLancando(true);
+        setNumeroAtual(null); // Oculta o resultado final durante o lançamento
+        playSound(rollSound.current); // Toca o som de rolar
+
+        let rollCount = 0;
+        const animationInterval = setInterval(() => {
+            // Alterna rapidamente entre faces para simular o rolar
+            setDisplayNumero(Math.floor(Math.random() * 6) + 1);
+            rollCount++;
+            if (rollCount > 10) { // Número de vezes para alternar as faces
+                clearInterval(animationInterval);
+            }
+        }, 80); // Velocidade da alternância (80ms)
+
         setTimeout(() => {
+            clearInterval(animationInterval); // Garante que o intervalo para
+
             const resultado = Math.floor(Math.random() * 6) + 1;
             setNumeroAtual(resultado);
+            setDisplayNumero(resultado); // Define o número final a exibir
             setResultados((prev) => [...prev, resultado]);
             setLancando(false);
-        }, 1000);
-    };
+        }, 1200); // Tempo total da animação (um pouco mais que o girar CSS)
+    }, [lancando, playSound, rollSound]);
 
-    const resetar = () => {
+    // Função para resetar os resultados
+    const resetar = useCallback(() => {
         setResultados([]);
         setNumeroAtual(null);
-    };
+        setDisplayNumero(null);
+        setLancando(false);
+    }, []);
 
-    const contarOcorrencias = (num: number) => resultados.filter((r) => r === num).length;
+    // Função auxiliar para contar ocorrências de um número
+    const contarOcorrencias = useCallback((num: number) => {
+        return resultados.filter((r) => r === num).length;
+    }, [resultados]);
 
+    // Dados para o Gráfico de Barras
     const chartDataBar = {
         labels: ["1", "2", "3", "4", "5", "6"],
         datasets: [
@@ -41,6 +88,7 @@ export default function Dados() {
         ],
     };
 
+    // Dados para o Gráfico Circular
     const chartDataPie = {
         labels: ["1", "2", "3", "4", "5", "6"],
         datasets: [
@@ -68,9 +116,18 @@ export default function Dados() {
 
             <div className="game-container">
                 <div className={`dado ${lancando ? "lancando" : ""}`}>
-                    {numeroAtual && <span className="numero">{numeroAtual}</span>}
+                    {displayNumero && (
+                        <img
+                            src={DICE_IMAGES[displayNumero]}
+                            alt={`Dado com ${displayNumero} pontos`}
+                            className="dice-image"
+                        />
+                    )}
+                    {!displayNumero && lancando && (
+                        <div className="rolling-text">A rolar...</div> // Feedback durante o lançamento
+                    )}
                 </div>
-                {numeroAtual && (
+                {numeroAtual !== null && !lancando && ( // Mostra o último resultado apenas se houver um e não estiver a rolar
                     <div className="last-result">
                         Último resultado: <strong>{numeroAtual}</strong>
                     </div>
@@ -81,7 +138,7 @@ export default function Dados() {
                 <button className="action-button" onClick={lancarDado} disabled={lancando}>
                     Lançar Dado
                 </button>
-                <button className="reset-button" onClick={resetar}>
+                <button className="action-button reset-button" onClick={resetar}>
                     Resetar
                 </button>
             </div>
@@ -113,7 +170,11 @@ export default function Dados() {
                                 <tr key={face}>
                                     <td>{face}</td>
                                     <td>{contarOcorrencias(face)}</td>
-                                    <td>{resultados.length > 0 ? Math.round((contarOcorrencias(face) / resultados.length) * 100) : 0}%</td>
+                                    <td>
+                                        {resultados.length > 0
+                                            ? `${Math.round((contarOcorrencias(face) / resultados.length) * 100)}%`
+                                            : '0%'}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -122,4 +183,6 @@ export default function Dados() {
             </div>
         </div>
     );
-}
+};
+
+export default Dados;

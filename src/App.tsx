@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Entrada from './pages/Entrada';
-import Dados from './components/Dados';
-import Roleta from './components/Roleta';
-import BlackjackGame from './components/Blackjack';
+import Dados from './components/Dados/Dados';
+import Roleta from './components/Roleta/Roleta';
+import BlackjackGame from './components/Blackjack/Blackjack';
 
 const App: React.FC = () => {
   return (

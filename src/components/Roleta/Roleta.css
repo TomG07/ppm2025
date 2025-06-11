@@ -32,6 +32,30 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
+    /* Adiciona uma transição para propriedades animáveis para um efeito mais suave */
+    transition: transform 0.2s ease-out;
+}
+
+/* Animação para o ponteiro */
+@keyframes pointerBounce {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+
+    /* Sobe ligeiramente */
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Classe que será adicionada/removida via JavaScript para ativar a animação */
+.ponteiro.animating {
+    animation: pointerBounce 0.4s ease-out;
+    /* Duração da animação do bounce */
 }
 
 .last-result {

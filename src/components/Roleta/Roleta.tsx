@@ -1,10 +1,9 @@
-import { useState, useRef } from "react"; // Removido useEffect pois não é necessário para esta alteração
+import { useState, useRef } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend } from "chart.js";
-import '../Common.css';
+import '../../Common.css';
 import "./Roleta.css";
 
-// Importar o ficheiro de áudio de 2.5 segundos
 import rouletteSpinSound from '/sounds/spin.wav';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
@@ -14,8 +13,8 @@ export default function Roleta() {
     const [historicoCores, setHistoricoCores] = useState<string[]>([]);
     const [anguloRotacao, setAnguloRotacao] = useState(0);
     const [girando, setGirando] = useState(false);
+    const [animandoPonteiro, setAnimandoPonteiro] = useState(false); // NOVO ESTADO PARA O PONTEIRO
 
-    // Criar instâncias de áudio
     const spinAudio = useRef(new Audio(rouletteSpinSound));
 
     const segmentosRoleta = [
@@ -32,14 +31,10 @@ export default function Roleta() {
 
         setGirando(true);
         setResultadoCor(null);
+        setAnimandoPonteiro(false); // Garante que o ponteiro não está a animar enquanto gira
 
-        // Tocar o som de giro
         spinAudio.current.currentTime = 0;
         spinAudio.current.play().catch(e => console.error("Erro ao tocar som de giro:", e));
-
-        if (navigator.vibrate) {
-            navigator.vibrate(200);
-        }
 
         const indiceSorteado = Math.floor(Math.random() * segmentosRoleta.length);
         const corSorteada = segmentosRoleta[indiceSorteado];
@@ -58,23 +53,20 @@ export default function Roleta() {
 
         setAnguloRotacao(novoAnguloRotacao);
 
-        // Ajustar a duração da animação para 2.5 segundos (2500 milissegundos)
-        const duracaoAnimacao = 2500; // <--- ALTERADO PARA 2.5 SEGUNDOS
+        const duracaoAnimacao = 2500;
 
         setTimeout(() => {
             setResultadoCor(corSorteada.nome);
             setHistoricoCores((prev) => [...prev, corSorteada.nome]);
             setGirando(false);
 
-            // Parar o som de giro. Não tocar som de paragem se não for necessário.
             spinAudio.current.pause();
             spinAudio.current.currentTime = 0;
 
-            // Remover a vibração ao parar se não for mais desejada
-            if (navigator.vibrate) {
-                navigator.vibrate(500);
-            }
-
+            setAnimandoPonteiro(true); // ATIVA A ANIMAÇÃO DO PONTEIRO QUANDO PARA
+            setTimeout(() => {
+                setAnimandoPonteiro(false); // DESATIVA A ANIMAÇÃO APÓS A SUA DURAÇÃO (0.4s)
+            }, 400); // 400ms = 0.4s, a duração da animação 'pointerBounce'
         }, duracaoAnimacao);
     };
 
@@ -83,6 +75,7 @@ export default function Roleta() {
         setHistoricoCores([]);
         setGirando(false);
         setAnguloRotacao(0);
+        setAnimandoPonteiro(false); // Garante que o ponteiro não está a animar no reset
         spinAudio.current.pause();
         spinAudio.current.currentTime = 0;
     };
@@ -157,12 +150,12 @@ export default function Roleta() {
                 <div className="roleta-container">
                     <div
                         className="roleta"
-                        // A transição CSS também precisa ser ajustada para 2.5s
                         style={{ transform: `rotate(${anguloRotacao}deg)`, transition: girando ? 'transform 2.5s ease-out' : 'none' }}
                     >
                         <Pie data={pieChartDataRoleta} options={pieChartOptionsRoleta} />
                     </div>
-                    <div className="ponteiro"></div>
+                    {/* ADICIONA/REMOVE A CLASSE 'animating' BASEADO NO ESTADO 'animandoPonteiro' */}
+                    <div className={`ponteiro ${animandoPonteiro ? 'animating' : ''}`}></div>
                 </div>
 
                 {resultadoCor && (

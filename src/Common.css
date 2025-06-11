@@ -3,6 +3,7 @@ body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     background-color: #1A1A2E;
+    /* Fundo escuro para realçar o neon */
     color: #E5E5E5;
     line-height: 1.6;
 }
@@ -40,14 +41,18 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* Manter a transição para suavizar o efeito hover */
     width: 100%;
     max-width: 200px;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal */
 }
 
 .nav-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+    /* APLICADO: Brilho intenso no hover */
+    box-shadow: 0 0 10px #E94560, 0 0 20px #E94560, 0 0 30px rgba(233, 69, 96, 0.4);
+    text-shadow: 0 0 8px #FFFFFF, 0 0 15px #E94560;
 }
 
 /* Cabeçalho */
@@ -63,14 +68,22 @@ body {
 .main-header h1 {
     font-size: 2.5rem;
     color: #00FFD1;
+    /* Cor verde-água */
     margin-bottom: 0.5rem;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
 .subtitle {
     font-size: 1.2rem;
     color: #A8DADC;
+    /* Cor azul claro */
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
 /* Container de jogo */
@@ -85,6 +98,7 @@ body {
     box-sizing: border-box;
 }
 
+/* Pode ser usado para display de saldo, mensagens de jogo, etc. */
 .game-display {
     background-color: #0F3460;
     border-radius: 10px;
@@ -95,6 +109,11 @@ body {
     font-size: 1.1rem;
     width: 100%;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor e sombra padrão. */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* Sombra padrão, não neon */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
 .last-result {
@@ -102,9 +121,12 @@ body {
     color: #00FFD1;
     font-size: 1.2rem;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
-/* Botões */
+/* Botões de Ação */
 .action-buttons {
     display: flex;
     justify-content: center;
@@ -125,23 +147,35 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* Manter a transição para suavizar o efeito hover */
     width: 100%;
     max-width: 200px;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal */
 }
 
 .action-button:disabled {
-    background: #A8DADC;
+    background: #5b212f;
+    /* Cor mais escura e subtil quando desabilitado */
+    color: #A8DADC;
     cursor: not-allowed;
+    box-shadow: none;
+    /* Remove o brilho quando desabilitado */
+    text-shadow: none;
+    transform: none;
+    /* Remove a translação no disabled */
 }
 
 .action-button:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+    /* APLICADO: Brilho intenso no hover */
+    box-shadow: 0 0 10px #E94560, 0 0 20px #E94560, 0 0 30px rgba(233, 69, 96, 0.4);
+    text-shadow: 0 0 8px #FFFFFF, 0 0 15px #E94560;
 }
 
 .reset-button {
     background: #00C9A7;
+    /* Um verde um pouco diferente para distinguir do primário */
     color: #1A1A2E;
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
@@ -149,21 +183,26 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* Manter a transição para suavizar o efeito hover */
     width: 100%;
     max-width: 200px;
     text-align: center;
+    /* REMOVIDO: Efeito Neon normal */
 }
 
 .reset-button:hover {
     transform: translateY(-2px);
     background: #00FFD1;
-    box-shadow: 0 6px 16px rgba(0, 255, 209, 0.3);
+    /* Cor mais brilhante no hover */
+    /* APLICADO: Brilho intenso no hover */
+    box-shadow: 0 0 10px #00FFD1, 0 0 20px #00FFD1, 0 0 30px rgba(0, 255, 209, 0.4);
+    text-shadow: 0 0 8px #1A1A2E, 0 0 15px #00FFD1;
 }
 
-/* Container de conteúdo */
+/* Container de conteúdo (gráficos e tabelas) */
 .content-container {
     display: flex;
-    flex-direction: row; /* Side by side charts */
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 1.5rem;
     width: 100%;
@@ -179,8 +218,10 @@ body {
     background: #0F3460;
     border-radius: 12px;
     padding: 1.5rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    /* Manter transição para o translateY */
     text-align: center;
     flex: 1;
     min-width: 300px;
@@ -191,12 +232,19 @@ body {
 
 .chart-card:hover {
     transform: translateY(-2px);
+    /* REMOVIDO: Efeito Neon no hover do card, manter apenas o translateY */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    /* Sombra mais escura no hover, não neon */
 }
 
 .chart-card h2 {
     font-size: 1.5rem;
     color: #E94560;
+    /* Cor vermelha para os títulos dos cards */
     margin-bottom: 1rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
 /* Card de tabela */
@@ -204,12 +252,14 @@ body {
     background: #0F3460;
     border-radius: 12px;
     padding: 1.5rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    /* Manter transição para o translateY */
     text-align: center;
     flex: 1;
     min-width: 0;
-    max-width: 1000px; /* Wider table */
+    max-width: 1000px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -219,12 +269,18 @@ body {
 
 .table-card:hover {
     transform: translateY(-2px);
+    /* REMOVIDO: Efeito Neon no hover do card, manter apenas o translateY */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    /* Sombra mais escura no hover, não neon */
 }
 
 .table-card h2 {
     font-size: 1.5rem;
     color: #E94560;
     margin-bottom: 1rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
 /* Tabela */
@@ -234,8 +290,10 @@ body {
     border-collapse: separate;
     border-spacing: 0;
     background: #16213E;
+    /* Cor de fundo da tabela mais escura */
     border-radius: 8px;
     overflow: hidden;
+    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -258,10 +316,20 @@ body {
     text-transform: uppercase;
     font-size: 0.9rem;
     padding: 1.2rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor e sombra padrão. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
+    box-shadow: none;
+    /* Remove a sombra interna */
 }
 
 .result-table tr:hover {
     background: #2A4D7C;
+    /* Fundo mais escuro no hover da linha */
+    color: #00FFD1;
+    /* Texto com cor neon no hover */
+    text-shadow: 0 0 3px #00FFD1;
+    /* APLICADO: Brilho subtil no texto da linha hover */
 }
 
 .result-table tr:last-child td {
@@ -273,9 +341,12 @@ body {
     color: #A8DADC;
     text-align: center;
     font-size: 1rem;
+    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
+    text-shadow: none;
+    /* Garante que não há sombra de texto por padrão */
 }
 
-/* Responsividade */
+/* Responsividade (mantida como está) */
 @media (max-width: 1024px) {
     .content-container {
         flex-direction: column;

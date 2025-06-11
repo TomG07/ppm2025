@@ -33,7 +33,7 @@ const Entrada = () => {
                         <p>
                             Desenvolvemos uma série de jogos interativos para ensino de probabilidades,
                             combinando teoria matemática com aplicações práticas. Este projeto tem como objetivo tornar
-                            conceitos complexos mais acessíveis através da experimentação.
+                            conceitos complexos mais acessíveis através da prática.
                         </p>
                     </motion.div>
 
@@ -84,7 +84,7 @@ const Entrada = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    Jogo 1: Lançador de Dados
+                    Jogo 1: Lançamento de Dados
                 </motion.a>
                 <motion.a
                     href="/roleta"
