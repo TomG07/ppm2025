@@ -1,7 +1,16 @@
 import { motion } from 'framer-motion';
+import { useEffect } from 'react'; // Importa useEffect
 import './Entrada.css';
 
 const Entrada = () => {
+    // Adiciona e remove uma classe do body quando o componente é montado/desmontado
+    useEffect(() => {
+        document.body.classList.add('entrada-page-body'); // Adiciona a classe
+        return () => {
+            document.body.classList.remove('entrada-page-body'); // Remove a classe ao sair da página
+        };
+    }, []); // Array de dependências vazio para correr apenas uma vez na montagem
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -21,39 +30,22 @@ const Entrada = () => {
 
             {/* Conteúdo Principal */}
             <div className="content-grid">
-                <div className="left-column">
-                    {/* Card do Projeto */}
-                    <motion.div
-                        className="content-card"
-                        initial={{ scale: 0.95 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 100 }}
-                    >
-                        <h2><span className="icon">📐</span> Sobre o Projeto</h2>
-                        <p>
-                            Desenvolvemos uma série de jogos interativos para ensino de probabilidades,
-                            combinando teoria matemática com aplicações práticas. Este projeto tem como objetivo tornar
-                            conceitos complexos mais acessíveis através da prática.
-                        </p>
-                    </motion.div>
+                {/* Card do Projeto */}
+                <motion.div
+                    className="content-card"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 100 }}
+                >
+                    <h2><span className="icon">📐</span> Sobre o Projeto</h2>
+                    <p>
+                        Desenvolvemos uma série de jogos interativos para ensino de probabilidades,
+                        combinando teoria matemática com aplicações práticas. Este projeto tem como objetivo tornar
+                        conceitos complexos mais acessíveis através da prática.
+                    </p>
+                </motion.div>
 
-                    {/* Card do Prêmio */}
-                    <motion.div
-                        className="content-card"
-                        initial={{ scale: 0.95 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 100, delay: 0.2 }}
-                    >
-                        <h2><span className="icon">🏆</span> O Prémio</h2>
-                        <p>
-                            Criado em 2008 para incentivar inovações na educação matemática, o Prémio Pedro de Matos
-                            homenageia os projetos inovadores e melhor conseguidos no país de acordo com o tema anual. O tema de 2025 é
-                            "Matemática (In)Discreta".
-                        </p>
-                    </motion.div>
-                </div>
-
-                {/* Card da Equipe */}
+                {/* Card do Grupo */}
                 <motion.div
                     className="content-card"
                     initial={{ scale: 0.95 }}
@@ -62,7 +54,23 @@ const Entrada = () => {
                 >
                     <h2><span className="icon">👥</span> O Grupo</h2>
                     <p>
-                        Formado por 3 estudantes do 11º Ano, todos apaixonados por matemática e tecnologia. Procuramos sempre o melhor para o nosso projeto, sempre com a aprovação da nossa professora orientadora.
+                        Formado por 3 estudantes do 11º Ano, todos apaixonados por matemática e tecnologia.
+                        Procuramos sempre o melhor para o nosso projeto, sempre com a aprovação da nossa professora orientadora.
+                    </p>
+                </motion.div>
+
+                {/* Card do Prêmio */}
+                <motion.div
+                    className="content-card"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 100, delay: 0.2 }}
+                >
+                    <h2><span className="icon">🏆</span> O Prémio</h2>
+                    <p>
+                        Criado em 2008 para incentivar inovações na educação matemática, o Prémio Pedro de Matos
+                        homenageia os projetos inovadores e melhor conseguidos no país de acordo com o tema anual. O tema de 2025 é
+                        "Matemática (In)Discreta".
                     </p>
                 </motion.div>
             </div>
