@@ -66,7 +66,7 @@ const Entrada = () => {
                         Juntos, em conjunto com a nossa professora, temos orgulho de ter conquistado o 2º lugar na edição anterior deste prémio.
                     </p>
                     <div className="team-photo">
-                        <img src="/grupo.jpeg" alt="Grupo do Projeto" />
+                        <img src="/images/grupo.jpeg" alt="Grupo do Projeto" />
                     </div>
                 </motion.div>
             </div>
