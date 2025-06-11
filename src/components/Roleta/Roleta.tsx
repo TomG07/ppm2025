@@ -170,7 +170,7 @@ export default function Roleta() {
                     Girar Roleta
                 </button>
                 <button className="reset-button" onClick={resetarRoleta}>
-                    Resetar Roleta
+                    Limpar Dados
                 </button>
             </div>
 

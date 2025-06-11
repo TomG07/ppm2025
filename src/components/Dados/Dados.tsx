@@ -139,7 +139,7 @@ const Dados: React.FC = () => { // Usar React.FC para consistência
                     Lançar Dado
                 </button>
                 <button className="action-button reset-button" onClick={resetar}>
-                    Resetar
+                    Limpar Dados
                 </button>
             </div>
 
