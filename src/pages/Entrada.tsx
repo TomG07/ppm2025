@@ -62,12 +62,8 @@ const Entrada = () => {
                 >
                     <h2><span className="icon">👥</span> O Grupo</h2>
                     <p>
-                        Formado por 3 estudantes do 11º Ano, todos apaixonados por matemática e tecnologia.
-                        Juntos, em conjunto com a nossa professora, temos orgulho de ter conquistado o 2º lugar na edição anterior deste prémio.
+                        Formado por 3 estudantes do 11º Ano, todos apaixonados por matemática e tecnologia. Procuramos sempre o melhor para o nosso projeto, sempre com a aprovação da nossa professora orientadora.
                     </p>
-                    <div className="team-photo">
-                        <img src="/images/grupo.jpeg" alt="Grupo do Projeto" />
-                    </div>
                 </motion.div>
             </div>
 
