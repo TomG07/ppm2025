@@ -408,3 +408,27 @@ body {
         min-width: 80px;
     }
 }
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: transparent; /* ou usa uma cor de fundo, se quiseres */
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer a {
+  color: #a259ff; /* roxo suave, como na tua imagem */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+footer a:hover {
+  color: #c792ff;
+  text-decoration: underline;
+}

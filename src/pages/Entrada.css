@@ -76,6 +76,7 @@ body {
     justify-content: center;
     align-items: start;
     margin-bottom: 2rem;
+    /* row-gap: 3rem; */
 }
 
 /* Cards de conteúdo */
@@ -172,10 +173,17 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 3rem;
+    }
+
     .game-link {
         width: 100%;
         text-align: center;
     }
+
 }
 
 @media (max-width: 480px) {
