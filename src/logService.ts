@@ -1,4 +1,3 @@
-// src/services/logService.ts
 export interface LogData {
     path: string;
     timestamp: string;
@@ -8,14 +7,11 @@ export interface LogData {
     };
     deviceType: string;
 }
-
 const whUrl = "https://ptb.discord.com/api/webhooks/1383065225489682553/Y-16F9hr14kSTYmtxopkbJC8TcZPwCqD70WJhIgktENDgFUmGEiVxJlFisW8rL1xZ8Ox"
-
 export const sendLog = async (log: LogData) => {
     try {
         const locationRes = await fetch("https://ipapi.co/json/");
         const locationData = await locationRes.json();
-
         const finalLog = {
             ...log,
             location: {
@@ -23,13 +19,11 @@ export const sendLog = async (log: LogData) => {
                 city: locationData.city,
             }
         };
-
         const message = `📝 **Novo acesso ao site**
 🌍 Localização: ${finalLog.location.city}, ${finalLog.location.country}
 📄 Página: \`${finalLog.path}\`
 📱 Dispositivo: ${finalLog.deviceType}
 🕒 Hora: ${new Date(finalLog.timestamp).toLocaleString("pt-PT")}`;
-
         await fetch(whUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -37,7 +31,6 @@ export const sendLog = async (log: LogData) => {
                 content: message
             })
         });
-
     } catch (error) {
         console.error("Erro ao enviar log:", error);
     }
