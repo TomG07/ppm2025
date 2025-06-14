@@ -3,52 +3,71 @@
 
 /* Estilos específicos do componente Dados */
 
+/* Removi algumas propriedades repetidas que já estão em Common.css ou que serão sobrescritas */
 .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* display: flex; */
+    /* Já em Common.css */
+    /* flex-direction: column; */
+    /* Já em Common.css */
+    /* align-items: center; */
+    /* Já em Common.css */
+    gap: 1.5rem;
+    /* Ajustei o gap para ser consistente */
+    /* margin-bottom: 2rem; */
+    /* Já ajustado em Common.css */
+    padding: 1.5rem;
+    /* Aumentei o padding */
+    border-radius: 12px;
+    /* Mais arredondado */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    /* Sombra mais pronunciada */
+    background-color: #0F3460;
+    /* Fundo para o container do jogo */
 }
 
 .dado {
-    width: 150px;
-    /* Aumentado para melhor visualização das imagens */
-    height: 150px;
-    background-color: #0F3460;
+    width: 180px;
+    /* Aumentei o tamanho do dado */
+    height: 180px;
+    background-color: #1A1A2E;
+    /* Cor de fundo do dado */
     border: 4px solid #E94560;
-    border-radius: 20px;
+    border-radius: 25px;
+    /* Mais arredondado */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 3.5rem;
+    /* Tamanho da fonte maior */
     color: #FFFFFF;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    /* Sombra mais forte */
     cursor: pointer;
     overflow: hidden;
-    /* Garante que a imagem do dado não ultrapasse os limites */
     position: relative;
-    /* Para posicionar o texto de rolar */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Transição para o hover */
 }
+
+.dado:hover {
+    transform: translateY(-5px) scale(1.02);
+    /* Leve elevação e escala no hover */
+    box-shadow: 0 10px 25px rgba(233, 69, 96, 0.6);
+    /* Brilho neon mais forte no hover */
+}
+
 
 .dice-image {
     width: 90%;
-    /* Ajusta o tamanho da imagem dentro do dado */
     height: 90%;
     object-fit: contain;
-    /* Garante que a imagem se encaixe */
     transition: opacity 0.1s ease-in-out;
-    /* Para transição entre imagens */
 }
 
 .dado.lancando {
     animation: girar 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    /* Animação mais suave */
-    box-shadow: 0 8px 20px rgba(233, 69, 96, 0.5);
+    box-shadow: 0 10px 25px rgba(233, 69, 96, 0.8);
+    /* Brilho mais forte durante o lançamento */
 }
 
 @keyframes girar {
@@ -57,7 +76,8 @@
     }
 
     50% {
-        transform: rotateX(360deg) rotateY(360deg) scale(1.05);
+        transform: rotateX(360deg) rotateY(360deg) scale(1.1);
+        /* Um pouco mais de escala */
     }
 
     100% {
@@ -65,18 +85,22 @@
     }
 }
 
-.rolling-text {
+.rolling-text,
+.fast-rolling-text {
+    /* Estilizei o fast-rolling-text também */
     position: absolute;
     color: #00FFD1;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    /* Tamanho maior */
     font-weight: bold;
     animation: pulse 1.5s infinite alternate;
-    /* Animação para o texto "A rolar..." */
+    text-shadow: 0 0 10px #00FFD1;
+    /* Sombra neon para o texto */
 }
 
 @keyframes pulse {
     0% {
-        opacity: 0.5;
+        opacity: 0.6;
     }
 
     100% {
@@ -84,132 +108,7 @@
     }
 }
 
-
-.last-result {
-    font-size: 1.5rem;
-    color: #00FFD1;
-    margin-top: 1rem;
-    font-weight: 600;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.action-button {
-    background: #E94560;
-    color: #ffffff;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-}
-
-.action-button:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(233, 69, 96, 0.4);
-    background-color: #c9354e;
-}
-
-.action-button:disabled {
-    background: #5b212f;
-    cursor: not-allowed;
-    opacity: 0.7;
-    transform: none;
-    box-shadow: none;
-}
-
-.reset-button {
-    background-color: #0F3460;
-    border: 2px solid #00FFD1;
-    color: #00FFD1;
-}
-
-.reset-button:hover:not(:disabled) {
-    background-color: #1A1A2E;
-    box-shadow: 0 6px 15px rgba(0, 255, 209, 0.3);
-}
-
-.content-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 2rem;
-}
-
-.chart-card,
-.table-card {
-    background: #0f3460;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    color: #e5e5e5;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.chart-card h2,
-.table-card h2 {
-    color: #00FFD1;
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-}
-
-.result-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
-
-.result-table th,
-.result-table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #2a4d7c;
-    color: #A8DADC;
-}
-
-.result-table th {
-    background: #E94560;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-.result-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.total-spins {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-    color: #A8DADC;
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-
-    .chart-card,
-    .table-card {
-        max-width: 100%;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
+/* Os estilos para .last-result, .action-buttons, .action-button, .reset-button, .content-container,
+.chart-card, .table-card, h2, .result-table, th, td, .total-spins estão agora primariamente em Common.css.
+Se quiser sobrescrever algum deles especificamente para Dados.css, pode fazê-lo aqui.
+No entanto, os estilos de Common.css já são bem abrangentes. */

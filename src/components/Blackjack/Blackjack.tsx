@@ -26,26 +26,26 @@ const Blackjack: React.FC = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [isDealerTurn, setIsDealerTurn] = useState(false);
     const [hiddenDealerCardIndex, setHiddenDealerCardIndex] = useState<number | null>(null);
-    // [REMOVIDO] const [playerBalance, setPlayerBalance] = useState(1000);
-    // [REMOVIDO] const [currentBet, setCurrentBet] = useState(INITIAL_BET);
     const [messageClass, setMessageClass] = useState('');
 
-    // Referências para os elementos de áudio
-    // Certifica-te de que estes ficheiros estão em public/sounds/
+    // Audio references
     const dealSound = useRef(new Audio('/sounds/card_deal.wav'));
     const winSound = useRef(new Audio('/sounds/win.wav'));
-    const loseSound = useRef(new Audio('/sounds/lose.wav'));
+    const loseSound = useRef(new Audio('/sounds/lose/lose.wav')); // Certifique-se que o caminho está correto
     const tieSound = useRef(new Audio('/sounds/tie.wav'));
 
-    // Função para tocar som
-     const playSound = useCallback((audioElement: HTMLAudioElement) => {
-        audioElement.currentTime = 0; // Reset para poder tocar rapidamente
-        audioElement.play().catch(e => console.error("Erro ao tocar som:", e));
+    // Ref para controlar o timeout do Blackjack inicial para evitar duplicações
+    const blackjackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // Function to play sound
+    const playSound = useCallback((audioElement: HTMLAudioElement) => {
+        audioElement.currentTime = 0; // Reset to play quickly
+        audioElement.play().catch(e => console.error("Error playing sound:", e));
     }, []);
 
-    // Gera uma carta aleatória (valor, não naipe)
+    // Generates a random card (value, not suit)
     const getRandomCard = (): CardValue => {
-        const value = Math.floor(Math.random() * 13) + 1; // 1 a 13
+        const value = Math.floor(Math.random() * 13) + 1; // 1 to 13
         if (value === 1) return 'A';
         if (value === 11) return 'J';
         if (value === 12) return 'Q';
@@ -53,7 +53,7 @@ const Blackjack: React.FC = () => {
         return value;
     };
 
-    // Soma os valores das cartas, lidando com Ases
+    // Sums card values, handling Aces
     const sumCards = (cards: CardValue[]): number => {
         let sum = 0;
         let numAces = 0;
@@ -76,7 +76,7 @@ const Blackjack: React.FC = () => {
         return sum;
     };
 
-    // Função para resetar o estado do jogo (chamada antes de um novo jogo)
+    // Function to reset game state
     const resetGame = useCallback(() => {
         setPlayerCards([]);
         setDealerCards([]);
@@ -85,169 +85,249 @@ const Blackjack: React.FC = () => {
         setGameStarted(false);
         setIsDealerTurn(false);
         setHiddenDealerCardIndex(null);
-        setMessageClass(''); // Limpa a classe de estilo da mensagem
-    }, []); // Não depende de props ou estado
-
-    // Função para finalizar o jogo e atualizar saldo/estatísticas
-    // Mover para antes de outras funções que a chamam (startGame, hit, autoPlayDealer)
-    const endGame = useCallback((resultMessage: string, resultKey: 'wins' | 'losses' | 'ties') => {
-        setIsGameOver(true);
-        setMessage(resultMessage);
-
-        // [REMOVIDO] let newBalance = playerBalance;
-        if (resultKey === 'wins') {
-            // [REMOVIDO] newBalance += currentBet * 2;
-            playSound(winSound.current); // Passa o elemento de áudio, não o ref
-            setMessageClass('message-win');
-        } else if (resultKey === 'losses') {
-            playSound(loseSound.current); // Passa o elemento de áudio, não o ref
-            setMessageClass('message-lose');
-        } else { // ties
-            // [REMOVIDO] newBalance += currentBet;
-            playSound(tieSound.current); // Passa o elemento de áudio, não o ref
-            setMessageClass('message-tie');
+        setMessageClass('');
+        // Limpar qualquer timeout pendente ao reiniciar o jogo
+        if (blackjackTimeoutRef.current) {
+            clearTimeout(blackjackTimeoutRef.current);
+            blackjackTimeoutRef.current = null;
         }
-        // [REMOVIDO] setPlayerBalance(newBalance);
-        setStats(prev => ({ ...prev, [resultKey]: prev[resultKey] + 1 }));
-        setGameStarted(false); // O jogo terminou
-        setIsDealerTurn(false); // Turno do dealer finalizado
+    }, []);
 
-        // Limpa a mensagem e a classe de feedback após um tempo
-        setTimeout(() => {
-            setMessage('');
-            setMessageClass('');
-        }, 3000); // A mensagem desaparece após 3 segundos
-    }, [playSound, winSound, loseSound, tieSound]); // Dependências ajustadas
-
-    // Distribui as cartas iniciais com animação
-    const dealInitialCards = useCallback(async () => {
-        // Sequência de distribuição de cartas com atrasos e sons
-        await new Promise(resolve => setTimeout(resolve, 300)); // Pequeno atraso inicial
-        setPlayerCards([getRandomCard()]); // 1ª carta jogador
-        playSound(dealSound.current);
-        await new Promise(resolve => setTimeout(resolve, 700));
-
-        setDealerCards([getRandomCard()]); // 1ª carta dealer
-        playSound(dealSound.current);
-        await new Promise(resolve => setTimeout(resolve, 700));
-
-        setPlayerCards(prev => { // 2ª carta jogador
-            const newCards = [...prev, getRandomCard()];
-            playSound(dealSound.current);
-            return newCards;
-        });
-        await new Promise(resolve => setTimeout(resolve, 700));
-
-        setDealerCards(prev => { // 2ª carta dealer (escondida)
-            const newCards = [...prev, getRandomCard()];
-            playSound(dealSound.current);
-            return newCards;
-        });
-        setHiddenDealerCardIndex(1); // Esconde a segunda carta do dealer
-        await new Promise(resolve => setTimeout(resolve, 700));
-
-    }, [playSound, dealSound]); // dealSound.current é uma referência estável, mas incluir playSound é bom
-
-    // Inicia um novo jogo
-    const startGame = useCallback(async () => {
-        resetGame(); // Reinicia todos os estados do jogo
-        // [REMOVIDO] if (playerBalance < currentBet) {
-        // [REMOVIDO]     setMessage('Saldo insuficiente para a aposta. Ajusta a aposta ou adiciona fundos.');
-        // [REMOVIDO]     setMessageClass('message-error');
-        // [REMOVIDO]     return;
-        // [REMOVIDO] }
-        // [REMOVIDO] setPlayerBalance(prev => prev - currentBet); // Deduz a aposta do saldo (removido)
-        setGameStarted(true);
-
-        // Dispara a distribuição das cartas com animação
-        await dealInitialCards();
-
-        // Após a distribuição das cartas e suas animações, verifica Blackjack natural
-        // Usa setTimeout para garantir que o estado das cartas é atualizado antes da verificação
-        setTimeout(() => {
-            // Re-calcular os totais para garantir que os valores mais recentes do estado são usados
-            const finalPlayerTotal = sumCards(playerCards);
-            const finalDealerTotal = sumCards(dealerCards);
-
-            if (finalPlayerTotal === 21 && finalDealerTotal !== 21) {
-                setHiddenDealerCardIndex(null); // Revela a carta do dealer
-                endGame('Blackjack! Ganhaste!', 'wins');
-            } else if (finalPlayerTotal === 21 && finalDealerTotal === 21) {
-                setHiddenDealerCardIndex(null); // Revela a carta do dealer
-                endGame('Empate com Blackjack!', 'ties');
-            } else if (finalDealerTotal === 21) {
-                setHiddenDealerCardIndex(null); // Revela a carta do dealer
-                endGame('Dealer tem Blackjack! Perdeste!', 'losses');
+    // Function to end the game and update stats (now more strictly controlled by effects)
+    const endGame = useCallback((resultMessage: string, resultKey: 'wins' | 'losses' | 'ties') => {
+        // ESSENCIAL: Se o jogo JÁ ESTÁ TERMINADO, não faça nada.
+        // Isto é a defesa final para evitar múltiplas atualizações de estatísticas.
+        setIsGameOver(prevIsGameOver => {
+            if (prevIsGameOver) {
+                console.warn(`endGame called with "${resultMessage}", but game was already over. Ignoring.`);
+                return prevIsGameOver; // Return current true state
             }
-        }, 3000); // Dá tempo para todas as 4 cartas serem distribuídas e o estado ser atualizado
-    }, [dealInitialCards, playerCards, dealerCards, resetGame, endGame]); // Dependências ajustadas
 
-    // Jogador pede mais uma carta
+            // Se não estava terminado, processa o fim do jogo
+            setMessage(resultMessage);
+            if (resultKey === 'wins') {
+                playSound(winSound.current);
+                setMessageClass('message-win');
+            } else if (resultKey === 'losses') {
+                playSound(loseSound.current);
+                setMessageClass('message-lose');
+            } else { // ties
+                playSound(tieSound.current);
+                setMessageClass('message-tie');
+            }
+            setStats(prev => ({ ...prev, [resultKey]: prev[resultKey] + 1 }));
+
+            console.log("Chamado endGame para:", resultMessage);
+            setGameStarted(false); // Game has ended
+            setIsDealerTurn(false); // Dealer's turn finished
+
+            // Clear message and class after a delay
+            setTimeout(() => {
+                setMessage('');
+                setMessageClass('');
+            }, 3000);
+
+            return true; // Set isGameOver to true
+        });
+    }, [playSound, winSound, loseSound, tieSound]);
+
+    // Deals initial cards with animation
+    const dealInitialCards = useCallback(async () => {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        setPlayerCards([getRandomCard()]);
+        playSound(dealSound.current);
+        await new Promise(resolve => setTimeout(resolve, 700));
+
+        setDealerCards([getRandomCard()]);
+        playSound(dealSound.current);
+        await new Promise(resolve => setTimeout(resolve, 700));
+
+        setPlayerCards(prev => {
+            const newCards = [...prev, getRandomCard()];
+            playSound(dealSound.current);
+            return newCards;
+        });
+        await new Promise(resolve => setTimeout(resolve, 700));
+
+        setDealerCards(prev => {
+            const newCards = [...prev, getRandomCard()];
+            playSound(dealSound.current);
+            return newCards;
+        });
+        setHiddenDealerCardIndex(1);
+        await new Promise(resolve => setTimeout(resolve, 700));
+
+    }, [playSound, dealSound]);
+
+    // Starts a new game
+    const startGame = useCallback(async () => {
+        resetGame(); // Garante que tudo é limpo antes de começar
+        setGameStarted(true);
+        // O `useEffect` abaixo tratará da verificação inicial de Blackjack após as cartas serem dadas.
+        await dealInitialCards();
+    }, [resetGame, dealInitialCards]);
+
+    // Player requests another card
     const hit = useCallback(async () => {
-        if (isGameOver || !gameStarted || isDealerTurn) return; // Não permite hit se o jogo acabou, não começou ou é a vez do dealer
+        if (isGameOver || !gameStarted || isDealerTurn) return; // Não permitir ação se o jogo já terminou
 
         const newCard = getRandomCard();
-        // Usar o callback do setState para garantir que o estado `prev` é o mais recente
-        setPlayerCards(prev => {
-            const updatedCards = [...prev, newCard];
-            // Verifica se rebentou imediatamente após adicionar a carta
-            const currentTotal = sumCards(updatedCards);
-            if (currentTotal > 21) {
-                endGame('Perdeste! Ficaste acima de 21.', 'losses');
-            }
-            return updatedCards;
-        });
-        playSound(dealSound.current); // Toca o som de carta
-        await new Promise(resolve => setTimeout(resolve, 700)); // Pequeno atraso para a carta aparecer animada
-    }, [isGameOver, gameStarted, isDealerTurn, playSound, dealSound, endGame]); // Dependências ajustadas
+        setPlayerCards(prev => [...prev, newCard]); // Apenas adiciona a carta. A verificação de bust será feita no useEffect.
+        playSound(dealSound.current);
+        await new Promise(resolve => setTimeout(resolve, 700));
+    }, [isGameOver, gameStarted, isDealerTurn, playSound, dealSound]);
 
     // Lógica para o turno do dealer
     const autoPlayDealer = useCallback(async () => {
         setHiddenDealerCardIndex(null); // Revela a carta escondida do dealer
-        await new Promise(resolve => setTimeout(resolve, 600)); // Atraso para a animação de virar a carta
+        await new Promise(resolve => setTimeout(resolve, 600));
 
-        const currentDealerCards = [...dealerCards]; // Copia o estado atual do dealer
+        let currentDealerCards = [...dealerCards];
         let dealerTotal = sumCards(currentDealerCards);
 
-        // O dealer saca cartas enquanto o total for menor que 17
         while (dealerTotal < 17) {
             const newCard = getRandomCard();
-            currentDealerCards.push(newCard);
-            setDealerCards([...currentDealerCards]); // Atualiza o estado
-            playSound(dealSound.current); // Toca o som de carta
-            dealerTotal = sumCards(currentDealerCards); // Recalcula o total do dealer
-            await new Promise(resolve => setTimeout(resolve, 700)); // Atraso entre saques
+            currentDealerCards = [...currentDealerCards, newCard];
+            setDealerCards(currentDealerCards);
+            playSound(dealSound.current);
+            dealerTotal = sumCards(currentDealerCards);
+            await new Promise(resolve => setTimeout(resolve, 700));
         }
 
-        // Determina o vencedor após o turno do dealer
-        const playerTotal = sumCards(playerCards);
-        const finalDealerTotal = sumCards(currentDealerCards); // Usa o total final do dealer
+        // Não chamamos endGame diretamente aqui.
+        // A lógica de determinação do vencedor será no useEffect abaixo que observa o estado do jogo.
+        // É crucial que setDealerCards seja o último estado a ser atualizado aqui para o useEffect reagir.
+    }, [dealerCards, playSound, dealSound]);
 
-        if (finalDealerTotal > 21) {
-            endGame('Dealer rebentou! Ganhaste!', 'wins');
-        } else if (playerTotal > finalDealerTotal) {
-            endGame('Ganhaste!', 'wins');
-        } else if (playerTotal < finalDealerTotal) {
-            endGame('Perdeste!', 'losses');
-        } else {
-            endGame('Empate!', 'ties');
-        }
-    }, [dealerCards, playerCards, playSound, dealSound, endGame]); // Dependências ajustadas
-
-    // Jogador decide parar
+    // Player decides to stand
     const stand = useCallback(() => {
-        if (isGameOver || !gameStarted || isDealerTurn) return; // Não permite stand se o jogo acabou, não começou ou já é a vez do dealer
+        if (isGameOver || !gameStarted || isDealerTurn) return; // Não permitir ação se o jogo já terminou
         setIsDealerTurn(true); // Inicia o turno do dealer
-    }, [isGameOver, gameStarted, isDealerTurn]); // Dependências
+    }, [isGameOver, gameStarted, isDealerTurn]);
 
-    // useEffect para disparar o turno do dealer quando isDealerTurn se torna true
+    // --- EFEITOS (USEEFFECTS) PARA GERIR A LÓGICA DO JOGO ---
+
+    // EFFECT 1: Lógica do Turno do Dealer
     useEffect(() => {
         if (isDealerTurn && !isGameOver) {
             autoPlayDealer();
         }
-    }, [isDealerTurn, isGameOver, autoPlayDealer]); // autoPlayDealer como dependência
+    }, [isDealerTurn, isGameOver, autoPlayDealer]);
 
-    // Dados para o Gráfico de Barras
+    // EFFECT 2: Determina o Vencedor no final de uma ronda
+    // Este é o EFFECT PRINCIPAL que consolida as condições de fim de jogo.
+    useEffect(() => {
+        // console.log("Entrou no useEffect"); // Para depuração
+        // Só corre se o jogo começou E não terminou ainda.
+        if (!gameStarted || isGameOver) {
+            // Limpar qualquer timeout pendente se as condições de saída forem satisfeitas
+            if (blackjackTimeoutRef.current) {
+                clearTimeout(blackjackTimeoutRef.current);
+                blackjackTimeoutRef.current = null;
+            }
+            // console.log("Saiu do useEffect (condição de guarda)");
+            return;
+        }
+
+        const playerTotal = sumCards(playerCards);
+        const dealerTotal = sumCards(dealerCards);
+
+        // Cenário 1: Blackjack Natural (no início do jogo, após cartas dadas)
+        if (playerCards.length === 2 && dealerCards.length === 2) {
+            // Se já existe um timeout agendado, não agende outro.
+            if (blackjackTimeoutRef.current) {
+                // console.log("Timeout de Blackjack já agendado. Ignorando nova agenda.");
+                return; // Já está agendado, não faça nada.
+            }
+
+            blackjackTimeoutRef.current = setTimeout(() => {
+                // Este log vai ajudar a ver se o timeout está a disparar.
+                // console.log("Callback do setTimeout de Blackjack disparou.");
+                // Resetar o ref imediatamente para que não seja reutilizado
+                blackjackTimeoutRef.current = null;
+
+                if (isGameOver) {
+                    console.log("Game was already over when Blackjack timeout fired. Ignoring.");
+                    return;
+                }
+
+                if (playerTotal === 21 && dealerTotal !== 21) {
+                    setHiddenDealerCardIndex(null);
+                    endGame('Blackjack! Ganhaste!', 'wins');
+                } else if (playerTotal === 21 && dealerTotal === 21) {
+                    setHiddenDealerCardIndex(null);
+                    endGame('Empate com Blackjack!', 'ties');
+                } else if (dealerTotal === 21) {
+                    setHiddenDealerCardIndex(null);
+                    endGame('Dealer tem Blackjack! Perdeste!', 'losses');
+                }
+            }, 3000);
+
+            // O retorno do useEffect para limpeza:
+            return () => {
+                if (blackjackTimeoutRef.current) {
+                    console.log("Limpando timeout de Blackjack na fase de cleanup.");
+                    clearTimeout(blackjackTimeoutRef.current);
+                    blackjackTimeoutRef.current = null; // Resetar o ref após limpar
+                }
+            };
+        }
+
+        // Cenário 2: Jogador rebenta (Bust)
+        if (playerTotal > 21) {
+            endGame('Perdeste! Ficaste acima de 21.', 'losses');
+            // Limpa o timeout de Blackjack natural se o jogador rebentar antes dele disparar
+            if (blackjackTimeoutRef.current) {
+                clearTimeout(blackjackTimeoutRef.current);
+                blackjackTimeoutRef.current = null;
+            }
+            // console.log("Saiu do useEffect (jogador rebentou)");
+            return;
+        }
+
+        // Cenário 3: Fim do Turno do Dealer (dealerTurn está ativo e cartas do dealer pararam de mudar)
+        if (isDealerTurn && !isGameOver && dealerCards.length > 0 && dealerTotal >= 17) {
+            // Certifica-se de que o timeout de Blackjack natural não está pendente
+            if (blackjackTimeoutRef.current) {
+                clearTimeout(blackjackTimeoutRef.current);
+                blackjackTimeoutRef.current = null;
+            }
+
+            const timeoutId = setTimeout(() => {
+                // console.log("Callback do setTimeout do dealer disparou.");
+                if (isGameOver) {
+                    // console.log("Game was already over when dealer timeout fired. Ignoring.");
+                    return;
+                }
+
+                if (dealerTotal > 21) {
+                    endGame('Dealer rebentou! Ganhaste!', 'wins');
+                } else if (playerTotal > dealerTotal) {
+                    endGame('Ganhaste!', 'wins');
+                } else if (playerTotal < dealerTotal) {
+                    endGame('Perdeste!', 'losses');
+                } else { // playerTotal === dealerTotal
+                    endGame('Empate!', 'ties');
+                }
+            }, 1000);
+
+            // console.log("Saiu do useEffect (fim do turno do dealer)");
+            return () => clearTimeout(timeoutId);
+        }
+
+        // console.log("Saiu do useEffect (sem condição de fim de jogo)");
+    }, [playerCards, dealerCards, gameStarted, isGameOver, isDealerTurn, endGame]);
+
+
+    // Dados para os gráficos e tabela de estatísticas
+    const totalGames = stats.wins + stats.losses + stats.ties;
+
+    const getPercentage = (count: number) => {
+        if (totalGames === 0) return '0%';
+        return `${((count / totalGames) * 100).toFixed(1)}%`;
+    };
+
+    // Data for Bar Chart
     const dataBar = {
         labels: ['Vitórias', 'Derrotas', 'Empates'],
         datasets: [
@@ -261,7 +341,7 @@ const Blackjack: React.FC = () => {
         ],
     };
 
-    // Dados para o Gráfico Circular
+    // Data for Pie Chart
     const dataPie = {
         labels: ['Vitórias', 'Derrotas', 'Empates'],
         datasets: [
@@ -287,27 +367,9 @@ const Blackjack: React.FC = () => {
                 <p className="subtitle">Tenta vencer o dealer sem passar dos 21 pontos!</p>
             </div>
 
-            <div className="game-area-container"> {/* Container principal da área de jogo */}
-                {/* [REMOVIDO] Informação do Saldo e Aposta */}
-                {/* <div className="player-info">
-                    <p>Saldo: €{playerBalance}</p>
-                    <p>Aposta: €{currentBet}</p>
-                </div> */}
-
-                {/* [REMOVIDO] Controles de Aposta */}
-                {/* <div className="bet-controls">
-                    {!gameStarted && !isGameOver && (
-                        <>
-                            <button className="bet-button" onClick={() => adjustBet(-5)} disabled={currentBet <= MIN_BET}>-5</button>
-                            <button className="bet-button" onClick={() => adjustBet(-1)} disabled={currentBet <= MIN_BET}>-1</button>
-                            <button className="bet-button" onClick={() => adjustBet(1)} disabled={currentBet >= MAX_BET}>+1</button>
-                            <button className="bet-button" onClick={() => adjustBet(5)} disabled={currentBet >= MAX_BET}>+5</button>
-                        </>
-                    )}
-                </div> */}
-
+            <div className="game-area-container">
                 <div className="game-container">
-                    {gameStarted && ( // Só mostra as cartas se o jogo tiver começado
+                    {gameStarted && (
                         <>
                             <div className="game-display">
                                 <h3>As tuas cartas ({sumCards(playerCards)}):</h3>
@@ -327,17 +389,15 @@ const Blackjack: React.FC = () => {
                             </div>
                         </>
                     )}
-                    {/* Mensagem de resultado com classes dinâmicas para estilo */}
                     {message && <p className={`last-result ${messageClass}`}>{message}</p>}
                 </div>
 
                 <div className="action-buttons">
-                    {!gameStarted || isGameOver ? ( // Mostra "Novo Jogo" se o jogo não começou ou terminou
-                        // [REMOVIDO] disabled={playerBalance < currentBet}
+                    {!gameStarted || isGameOver ? (
                         <button className="action-button" onClick={startGame}>
                             Novo Jogo
                         </button>
-                    ) : ( // Mostra "Pedir Carta" e "Parar" se o jogo estiver a decorrer
+                    ) : (
                         <>
                             <button className="action-button" onClick={hit} disabled={isGameOver || isDealerTurn}>
                                 Pedir Carta
@@ -348,13 +408,13 @@ const Blackjack: React.FC = () => {
                         </>
                     )}
                 </div>
-            </div> {/* Fim do game-area-container */}
+            </div>
 
             <div className="content-container">
                 <div className="chart-card">
                     <h2>Gráfico de Barras</h2>
                     <Bar data={dataBar} />
-                    <div className="total-spins">Total de jogos: {stats.wins + stats.losses + stats.ties}</div>
+                    <div className="total-spins">Total de jogos: {totalGames}</div>
                 </div>
 
                 <div className="chart-card">
@@ -369,12 +429,25 @@ const Blackjack: React.FC = () => {
                             <tr>
                                 <th>Resultado</th>
                                 <th>Contagem</th>
+                                <th>Percentagem</th> {/* Nova coluna para percentagem */}
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Vitórias</td><td>{stats.wins}</td></tr>
-                            <tr><td>Derrotas</td><td>{stats.losses}</td></tr>
-                            <tr><td>Empates</td><td>{stats.ties}</td></tr>
+                            <tr>
+                                <td>Vitórias</td>
+                                <td>{stats.wins}</td>
+                                <td>{getPercentage(stats.wins)}</td> {/* Exibir percentagem */}
+                            </tr>
+                            <tr>
+                                <td>Derrotas</td>
+                                <td>{stats.losses}</td>
+                                <td>{getPercentage(stats.losses)}</td> {/* Exibir percentagem */}
+                            </tr>
+                            <tr>
+                                <td>Empates</td>
+                                <td>{stats.ties}</td>
+                                <td>{getPercentage(stats.ties)}</td> {/* Exibir percentagem */}
+                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -1,54 +1,101 @@
-# React + TypeScript + Vite
+# A Matemática por Detrás dos Jogos de Azar: Sorte ou Estratégia?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto foi desenvolvido no âmbito do **Prémio Pedro de Matos 2025** e tem como objetivo explorar os conceitos de probabilidade e estatística através de jogos interativos.
 
-Currently, two official plugins are available:
+## 🧠 Objetivo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Através de simulações e visualizações interativas de jogos populares como Roleta, Dados e Blackjack, o projeto pretende demonstrar como a matemática influencia os resultados — desafiando a perceção de sorte e expondo o papel das probabilidades.
 
-## Expanding the ESLint configuration
+## 🚀 Tecnologias Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React** com **TypeScript**
+- **Vite** como bundler
+- **CSS Puro** para a estilização
+- Sem dependências externas (mínimo setup)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📁 Estrutura do Projeto
+
+```
+src/
+│
+├── components/
+│   ├── Blackjack/
+│   │   ├── Blackjack.tsx
+│   │   ├── Blackjack.css
+│   │   ├── Card.tsx
+│   │   └── Card.css
+│   ├── Dados/
+│   │   ├── Dados.tsx
+│   │   └── Dados.css
+│   └── Roleta/
+│       ├── Roleta.tsx
+│       └── Roleta.css
+│
+├── pages/
+│   └── Entrada.tsx
+│   └── Entrada.css
+│
+├── App.tsx
+├── main.tsx
+├── Common.css
+├── deviceType.ts
+├── logService.ts
+└── vite-env.d.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧩 Componentes
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🔢 Roleta
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Simula uma roleta com 8 setores numerados de 1 a 8. Mostra o conceito de equiprobabilidade e simula sorteios automáticos e manuais.
+
+### 🎲 Dados
+
+Simula o lançamento de um dado de 6 faces. Explora o conceito de distribuição uniforme e variação estatística em múltiplas tentativas.
+
+### 🂡 Blackjack
+
+Recria uma versão simplificada do jogo de cartas. Explora decisões estratégicas e probabilidades de vitória com base nas cartas em jogo.
+
+### 👋 Entrada
+
+Página inicial com contexto do projeto, agradecimento ao júri e navegação para os diferentes jogos.
+
+## 🎨 Estilização
+
+Todo o design foi feito com CSS puro, focando-se na clareza e usabilidade, mantendo o foco na funcionalidade e visualização dos conceitos matemáticos.
+
+## 🏁 Como Executar
+
+1. Clona o repositório:
+
+```bash
+git clone <url-do-repositório>
 ```
+
+2. Instala as dependências:
+
+```bash
+npm install
+```
+
+3. Inicia o projeto:
+
+```bash
+npm run dev
+```
+
+> Certifica-te de que tens o Node.js e o npm instalados.
+
+## 🏆 Reconhecimento
+
+Este projeto foi apresentado na edição de 2025 do **Prémio Pedro de Matos**, tendo como referência a participação anterior (2.º lugar em 2024).
+
+---
+
+## 📜 Licença
+
+Este projeto é propriedade dos seus autores e encontra-se protegido por direitos de autor.  
+A sua cópia, modificação ou redistribuição **sem autorização explícita** é **proibida**.
+
+Ver mais detalhes no ficheiro [`LICENSE`](./LICENSE).

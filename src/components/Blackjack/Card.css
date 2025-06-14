@@ -34,10 +34,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 6px;
-    /* Aumentar um pouco o padding para empurrar o conteúdo para dentro */
     box-sizing: border-box;
     overflow: hidden;
-    /* Manter este, caso haja algum transbordo mínimo */
 }
 
 .card-back {
@@ -56,6 +54,7 @@
 .card-front {
     background-color: #f0f0f0;
     color: #1A1A2E;
+    /* Cor de texto padrão para a frente da carta */
 }
 
 /* Layout das áreas da carta */
@@ -70,9 +69,6 @@
 
 .card-top-left {
     align-self: flex-start;
-    /* Remover margens, o padding do .card-face já deve bastar */
-    /* margin-left: 2px; */
-    /* margin-top: 2px; */
 }
 
 .card-center {
@@ -84,31 +80,26 @@
 
 .card-bottom-right {
     align-self: flex-end;
-    /* Remover margens, o padding do .card-face já deve bastar */
-    /* margin-right: 2px; */
-    /* margin-bottom: 2px; */
 }
 
 /* Estilos para os ícones e valores */
 .card-suit-icon {
     font-size: 1.3rem;
-    /* Ligeiramente menor */
 }
 
 .small-icon {
     font-size: 0.8rem;
-    /* Ligeiramente menor */
 }
 
 .large-icon {
     font-size: 2.5rem;
-    /* Ligeiramente menor */
 }
 
 .card-value {
     font-weight: bold;
     font-size: 1rem;
-    /* Ligeiramente menor (16px se o base for 16px) */
+    /* Adicionada esta linha para remover qualquer sombra de texto */
+    text-shadow: none;
 }
 
 /* Rotação para o canto inferior direito */

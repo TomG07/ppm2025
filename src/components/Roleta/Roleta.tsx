@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend } from "chart.js";
 import '../../Common.css';
@@ -8,33 +8,46 @@ import rouletteSpinSound from '/sounds/spin.wav';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
 
+const segmentosRoleta = [
+    { nome: 'Laranja', cor: '#FFA500' },
+    { nome: 'Dourado', cor: '#FFD700' },
+    { nome: 'Verde Lima', cor: '#7FFF00' },
+    { nome: 'Ciano', cor: '#00FFD1' },
+    { nome: 'Vermelho', cor: '#E94560' },
+    { nome: 'Azul Claro', cor: '#A8DADC' },
+];
+
 export default function Roleta() {
     const [resultadoCor, setResultadoCor] = useState<string | null>(null);
     const [historicoCores, setHistoricoCores] = useState<string[]>([]);
     const [anguloRotacao, setAnguloRotacao] = useState(0);
     const [girando, setGirando] = useState(false);
-    const [animandoPonteiro, setAnimandoPonteiro] = useState(false); // NOVO ESTADO PARA O PONTEIRO
+    const [animandoPonteiro, setAnimandoPonteiro] = useState(false);
+
+    // ESTADOS E REFS PARA AUTO PLAY
+    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+    const [autoPlayRoundsConfig, setAutoPlayRoundsConfig] = useState<number>(5);
+    const [remainingAutoPlayRounds, setRemainingAutoPlayRounds] = useState(0);
+    const autoPlayIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [isFastAutoPlay, setIsFastAutoPlay] = useState(false);
 
     const spinAudio = useRef(new Audio(rouletteSpinSound));
 
-    const segmentosRoleta = [
-        { nome: 'Laranja', cor: '#FFA500' },
-        { nome: 'Dourado', cor: '#FFD700' },
-        { nome: 'Azul Escuro', cor: '#0F3460' },
-        { nome: 'Ciano', cor: '#00FFD1' },
-        { nome: 'Vermelho', cor: '#E94560' },
-        { nome: 'Azul Claro', cor: '#A8DADC' },
-    ];
+    const playSound = useCallback((audioElement: HTMLAudioElement) => {
+        if (!isFastAutoPlay) {
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.error("Erro ao tocar som de giro:", e));
+        }
+    }, [isFastAutoPlay]);
 
-    const girarRoleta = () => {
+    const girarRoleta = useCallback(() => {
         if (girando) return;
 
         setGirando(true);
-        setResultadoCor(null);
-        setAnimandoPonteiro(false); // Garante que o ponteiro não está a animar enquanto gira
+        // Do NOT nullify resultadoCor immediately, let it show the previous result
+        setAnimandoPonteiro(false);
 
-        spinAudio.current.currentTime = 0;
-        spinAudio.current.play().catch(e => console.error("Erro ao tocar som de giro:", e));
+        playSound(spinAudio.current);
 
         const indiceSorteado = Math.floor(Math.random() * segmentosRoleta.length);
         const corSorteada = segmentosRoleta[indiceSorteado];
@@ -45,40 +58,102 @@ export default function Roleta() {
 
         const voltasCompletasAnimacao = 5;
 
-        let novoAnguloRotacao = Math.ceil(anguloRotacao / 360) * 360 + (voltasCompletasAnimacao * 360) + anguloParaAlinharComPonteiro;
-
-        while (novoAnguloRotacao <= anguloRotacao) {
+        // Ensure rotation always moves forward for visual effect in normal mode
+        let novoAnguloRotacao = anguloRotacao + (voltasCompletasAnimacao * 360) + anguloParaAlinharComPonteiro + (360 - (anguloRotacao % 360));
+        if (novoAnguloRotacao <= anguloRotacao) {
             novoAnguloRotacao += 360;
         }
 
-        setAnguloRotacao(novoAnguloRotacao);
+        const duracaoAnimacao = isFastAutoPlay ? 50 : 2500;
+        const ponteiroAnimacaoDuracao = isFastAutoPlay ? 0 : 400;
 
-        const duracaoAnimacao = 2500;
+        if (!isFastAutoPlay) {
+            setAnguloRotacao(novoAnguloRotacao);
+        } else {
+            // In fast mode, directly set the final angle for Chart.js to render correctly
+            // Chart.js handles its own rendering based on data, so just update the value
+            setAnguloRotacao(anguloParaAlinharComPonteiro);
+        }
 
         setTimeout(() => {
             setResultadoCor(corSorteada.nome);
             setHistoricoCores((prev) => [...prev, corSorteada.nome]);
             setGirando(false);
 
-            spinAudio.current.pause();
-            spinAudio.current.currentTime = 0;
+            if (!isFastAutoPlay) {
+                spinAudio.current.pause();
+                spinAudio.current.currentTime = 0;
+            }
 
-            setAnimandoPonteiro(true); // ATIVA A ANIMAÇÃO DO PONTEIRO QUANDO PARA
-            setTimeout(() => {
-                setAnimandoPonteiro(false); // DESATIVA A ANIMAÇÃO APÓS A SUA DURAÇÃO (0.4s)
-            }, 400); // 400ms = 0.4s, a duração da animação 'pointerBounce'
+            if (!isFastAutoPlay) {
+                setAnimandoPonteiro(true);
+                setTimeout(() => {
+                    setAnimandoPonteiro(false);
+                }, ponteiroAnimacaoDuracao);
+            }
         }, duracaoAnimacao);
-    };
+    }, [girando, anguloRotacao, playSound, spinAudio, isFastAutoPlay]);
 
-    const resetarRoleta = () => {
+    // LÓGICA DO AUTO PLAY PARA ROLETA
+    const iniciarAutoPlay = useCallback(() => {
+        if (isAutoPlaying) return;
+
+        if (autoPlayRoundsConfig <= 0) {
+            alert("Por favor, selecione um número de giros maior que 0 para o Auto Play.");
+            return;
+        }
+
+        setRemainingAutoPlayRounds(autoPlayRoundsConfig);
+        setIsAutoPlaying(true);
+        // Start the first spin immediately when autoplay starts, if not already spinning
+        if (!girando) {
+            girarRoleta();
+        }
+    }, [isAutoPlaying, autoPlayRoundsConfig, girando, girarRoleta]);
+
+    const pararAutoPlay = useCallback(() => {
+        setIsAutoPlaying(false);
+        if (autoPlayIntervalRef.current) {
+            clearTimeout(autoPlayIntervalRef.current);
+            autoPlayIntervalRef.current = null;
+        }
+        setRemainingAutoPlayRounds(0);
+    }, []);
+
+    useEffect(() => {
+        const intervalSpeed = isFastAutoPlay ? 10 : 3000; // Even faster for fast mode: 10ms
+
+        if (isAutoPlaying) {
+            if (remainingAutoPlayRounds > 0 && !girando) {
+                autoPlayIntervalRef.current = setTimeout(() => {
+                    girarRoleta();
+                    setRemainingAutoPlayRounds(prev => prev - 1);
+                }, intervalSpeed);
+            } else if (remainingAutoPlayRounds === 0) { // If rounds are done
+                pararAutoPlay();
+            }
+        }
+
+        return () => {
+            if (autoPlayIntervalRef.current) {
+                clearTimeout(autoPlayIntervalRef.current);
+                autoPlayIntervalRef.current = null;
+            }
+        };
+    }, [isAutoPlaying, remainingAutoPlayRounds, girando, girarRoleta, pararAutoPlay, isFastAutoPlay]);
+
+
+    const resetarRoleta = useCallback(() => {
+        pararAutoPlay();
         setResultadoCor(null);
         setHistoricoCores([]);
         setGirando(false);
         setAnguloRotacao(0);
-        setAnimandoPonteiro(false); // Garante que o ponteiro não está a animar no reset
+        setAnimandoPonteiro(false);
         spinAudio.current.pause();
         spinAudio.current.currentTime = 0;
-    };
+    }, [pararAutoPlay, spinAudio]);
+
 
     const contarOcorrenciasCor = (corNome: string) => historicoCores.filter((c) => c === corNome).length;
 
@@ -147,31 +222,99 @@ export default function Roleta() {
             </div>
 
             <div className="game-container-roleta">
-                <div className="roleta-container">
+                <div
+                    className="roleta-container"
+                    // Apply transition for normal speed, none for fast speed
+                    style={{ transition: isFastAutoPlay ? 'none' : 'transform 2.5s ease-out' }}
+                >
                     <div
                         className="roleta"
-                        style={{ transform: `rotate(${anguloRotacao}deg)`, transition: girando ? 'transform 2.5s ease-out' : 'none' }}
+                        // Apply rotation transition only if spinning and not in fast mode
+                        style={{ transform: `rotate(${anguloRotacao}deg)`, transition: girando && !isFastAutoPlay ? 'transform 2.5s ease-out' : 'none' }}
                     >
                         <Pie data={pieChartDataRoleta} options={pieChartOptionsRoleta} />
                     </div>
-                    {/* ADICIONA/REMOVE A CLASSE 'animating' BASEADO NO ESTADO 'animandoPonteiro' */}
-                    <div className={`ponteiro ${animandoPonteiro ? 'animating' : ''}`}></div>
+                    {/* Ponteiro only visible in normal mode */}
+                    {!isFastAutoPlay && <div className={`ponteiro ${animandoPonteiro ? 'animating' : ''}`}></div>}
                 </div>
 
-                {resultadoCor && (
-                    <div className="last-result">
-                        Cor sorteada: <strong style={{ color: segmentosRoleta.find(s => s.nome === resultadoCor)?.cor || '#FFF' }}>{resultadoCor}</strong>
-                    </div>
-                )}
+                {/* Always show the last result message, update content */}
+                <div className="last-result">
+                    Cor sorteada: <strong style={{ color: resultadoCor ? segmentosRoleta.find(s => s.nome === resultadoCor)?.cor || '#FFF' : '#FFF' }}>
+                        {resultadoCor !== null ? resultadoCor : 'N/A'}
+                    </strong>
+                </div>
             </div>
 
             <div className="action-buttons">
-                <button className="action-button" onClick={girarRoleta} disabled={girando}>
+                <button className="action-button" onClick={girarRoleta} disabled={girando || isAutoPlaying}>
                     Girar Roleta
                 </button>
                 <button className="reset-button" onClick={resetarRoleta}>
                     Limpar Dados
                 </button>
+            </div>
+
+            <div className="autoplay-section">
+                <h2>Auto Play</h2>
+                <div className="autoplay-controls-wrapper">
+                    <div className="autoplay-config">
+                        <label htmlFor="autoplay-rounds" className="autoplay-label">Giros:</label>
+                        <input
+                            type="range"
+                            id="autoplay-rounds"
+                            min="1"
+                            max="1000"
+                            step="1"
+                            value={autoPlayRoundsConfig}
+                            onChange={(e) => setAutoPlayRoundsConfig(parseInt(e.target.value))}
+                            disabled={isAutoPlaying || girando}
+                            className="autoplay-slider"
+                        />
+                        <span className="autoplay-value">{autoPlayRoundsConfig}</span>
+                    </div>
+
+                    <div className="autoplay-speed-toggle">
+                        <label className="switch">
+                            <input
+                                type="checkbox"
+                                checked={isFastAutoPlay}
+                                onChange={() => setIsFastAutoPlay(prev => !prev)}
+                                disabled={isAutoPlaying && !isFastAutoPlay}
+                            />
+                            <span className="slider round"></span>
+                        </label>
+                        <span className="speed-label">{isFastAutoPlay ? 'Velocidade Rápida' : 'Velocidade Normal'}</span>
+                    </div>
+
+                    <div className="autoplay-buttons">
+                        {!isAutoPlaying ? (
+                            <button
+                                className="action-button auto-play-button play-button"
+                                onClick={iniciarAutoPlay}
+                                disabled={girando || autoPlayRoundsConfig <= 0}
+                                title="Iniciar Auto Play"
+                            >
+                                <span className="icon">▶️</span> Iniciar Auto Play
+                            </button>
+                        ) : (
+                            <button
+                                className="action-button stop-auto-play-button pause-button"
+                                onClick={pararAutoPlay}
+                                // DO NOT disable if isFastAutoPlay is true
+                                disabled={girando && !isFastAutoPlay}
+                                title="Parar Auto Play"
+                            >
+                                <span className="icon">⏸️</span> Parar Auto Play
+                            </button>
+                        )}
+                    </div>
+                </div>
+                {isAutoPlaying && (
+                    <p className="autoplay-status">
+                        Auto Play Ativo! Giros restantes: <strong>{remainingAutoPlayRounds}</strong>
+                    </p>
+                )}
             </div>
 
             <div className="content-container">

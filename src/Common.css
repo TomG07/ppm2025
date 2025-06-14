@@ -6,94 +6,137 @@ body {
     /* Fundo escuro para realçar o neon */
     color: #E5E5E5;
     line-height: 1.6;
+    min-height: 100vh;
+    /* Garante que o body ocupa pelo menos a altura da viewport */
+    display: flex;
+    flex-direction: column;
+    /* Permite que o footer "empurre" para baixo se houver conteúdo suficiente */
 }
 
-/* Container principal */
+/* Container principal - Centraliza todo o conteúdo da página */
 .page-container {
     max-width: 1200px;
+    /* Largura máxima para todo o conteúdo */
     margin: 0 auto;
+    /* Centraliza o container na página */
     padding: 20px;
     min-height: 100vh;
+    /* Garante que o container ocupa a altura mínima da viewport */
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Centraliza os itens filhos horizontalmente */
     width: 100%;
+    /* Ocupa 100% da largura disponível até o max-width */
     box-sizing: border-box;
+    flex-grow: 1;
+    /* Permite que o container cresça e ocupe o espaço disponível */
 }
 
-/* Navegação */
+/* Navegação - Estilização aprimorada */
 .navigation-bar {
     width: 100%;
-    max-width: 450px;
+    /* Ocupa 100% da largura do page-container */
+    max-width: 300px;
+    /* Uma largura razoável para a barra de navegação em telas maiores */
     display: flex;
     justify-content: center;
-    margin-bottom: 1rem;
-    padding: 0 1rem;
+    /* Centraliza o botão dentro da barra */
+    margin-bottom: 2rem;
+    /* Mais espaço abaixo da barra */
+    padding: 0;
+    /* Remover padding, o botão terá seu próprio padding */
     box-sizing: border-box;
+    background-color: #0F3460;
+    /* Fundo para a barra, correspondendo aos cards */
+    border-radius: 10px;
+    /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Sombra mais suave */
 }
 
 .nav-button {
-    background: #E94560;
-    color: #FFFFFF;
-    padding: 0.6rem 1.2rem;
+    background: transparent;
+    /* Fundo transparente */
+    color: #00FFD1;
+    /* Cor neon do texto */
+    border: 2px solid #00FFD1;
+    /* Borda neon */
+    padding: 0.8rem 1.8rem;
+    /* Aumentado o padding para um botão maior */
     border-radius: 8px;
-    border: none;
-    font-weight: 500;
+    font-weight: 600;
+    /* Mais negrito */
+    font-size: 1.1rem;
+    /* Tamanho da fonte ligeiramente maior */
     cursor: pointer;
     transition: all 0.3s ease;
-    /* Manter a transição para suavizar o efeito hover */
-    width: 100%;
-    max-width: 200px;
+    width: auto;
+    /* Deixa o botão se ajustar ao conteúdo */
+    max-width: 100%;
+    /* Garante que não ultrapasse o pai em telas pequenas */
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal */
+    text-shadow: 0 0 5px #00FFD1;
+    /* Sombra de texto neon sutil no estado normal */
+    box-shadow: 0 0 8px rgba(0, 255, 209, 0.4);
+    /* Brilho neon sutil */
 }
 
 .nav-button:hover {
     transform: translateY(-2px);
-    /* APLICADO: Brilho intenso no hover */
-    box-shadow: 0 0 10px #E94560, 0 0 20px #E94560, 0 0 30px rgba(233, 69, 96, 0.4);
-    text-shadow: 0 0 8px #FFFFFF, 0 0 15px #E94560;
+    background-color: #00FFD1;
+    /* Fundo neon no hover */
+    color: #1A1A2E;
+    /* Texto escuro no hover para contraste */
+    box-shadow: 0 0 15px #00FFD1, 0 0 30px #00FFD1, 0 0 45px rgba(0, 255, 209, 0.6);
+    /* Brilho intenso */
+    text-shadow: none;
+    /* Remove a sombra de texto no hover para um visual mais limpo */
 }
 
 /* Cabeçalho */
 .main-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    /* Mais espaço abaixo do cabeçalho */
     width: 100%;
-    max-width: 450px;
+    max-width: 600px;
+    /* Aumentei o max-width para o cabeçalho */
     padding: 0 1rem;
     box-sizing: border-box;
 }
 
 .main-header h1 {
-    font-size: 2.5rem;
-    color: #00FFD1;
-    /* Cor verde-água */
-    margin-bottom: 0.5rem;
+    font-size: 3rem;
+    /* Tamanho maior para o título principal */
+    color: #E94560;
+    /* Cor vermelha vibrante */
+    margin-bottom: 0.8rem;
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    text-shadow: 0 0 10px #E94560, 0 0 20px rgba(233, 69, 96, 0.5);
+    /* Sombra de texto neon sutil */
 }
 
 .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    /* Tamanho ligeiramente maior para o subtítulo */
     color: #A8DADC;
-    /* Cor azul claro */
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    text-shadow: 0 0 5px #A8DADC;
+    /* Sombra de texto sutil */
 }
 
-/* Container de jogo */
-.game-container {
-    margin-bottom: 2rem;
+/* Container de jogo (ajuste para centralização consistente) */
+.game-container,
+.game-container-roleta {
+    /* Adicionei game-container-roleta aqui também */
+    margin-bottom: 2.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 450px;
+    /* Mantém uma largura razoável para o jogo */
     padding: 0 1rem;
     box-sizing: border-box;
 }
@@ -104,26 +147,31 @@ body {
     border-radius: 10px;
     padding: 1rem;
     margin: 0.5rem auto;
-    color: #E94560;
+    color: #00FFD1;
+    /* Cor neon */
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    /* Ligeiramente maior */
     width: 100%;
+    max-width: 350px;
+    /* Limita a largura */
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor e sombra padrão. */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    /* Sombra padrão, não neon */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    box-shadow: 0 0 8px rgba(0, 255, 209, 0.4);
+    /* Sombra neon */
+    text-shadow: 0 0 5px #00FFD1;
+    /* Sombra de texto neon */
 }
 
 .last-result {
-    margin-top: 1rem;
-    color: #00FFD1;
-    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    color: #E94560;
+    /* Cor para resultados */
+    font-size: 1.6rem;
+    /* Aumentei o tamanho do resultado */
+    font-weight: bold;
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    text-shadow: 0 0 8px #E94560, 0 0 15px rgba(233, 69, 96, 0.6);
+    /* Sombra neon intensa */
 }
 
 /* Botões de Ação */
@@ -133,81 +181,343 @@ body {
     gap: 1.5rem;
     flex-wrap: wrap;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
+    /* Aumentei a largura máxima para os botões */
     padding: 1rem;
     box-sizing: border-box;
+    margin-bottom: 3rem;
+    /* Mais espaço abaixo dos botões */
 }
 
 .action-button {
     background: #E94560;
     color: #FFFFFF;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.9rem 2rem;
+    /* Mais padding para botões maiores */
+    border-radius: 10px;
+    /* Bordas mais arredondadas */
     border: none;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1.2rem;
+    /* Tamanho da fonte maior */
     cursor: pointer;
     transition: all 0.3s ease;
-    /* Manter a transição para suavizar o efeito hover */
     width: 100%;
-    max-width: 200px;
+    max-width: 220px;
+    /* Largura máxima para cada botão */
     text-align: center;
-    /* REMOVIDO: Efeito Neon normal */
+    text-shadow: 0 0 5px #FFFFFF;
+    /* Sombra de texto branca sutil */
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
+    /* Sombra neon sutil */
 }
 
 .action-button:disabled {
-    background: #5b212f;
+    background: #3A121E;
     /* Cor mais escura e subtil quando desabilitado */
     color: #A8DADC;
     cursor: not-allowed;
     box-shadow: none;
-    /* Remove o brilho quando desabilitado */
     text-shadow: none;
     transform: none;
-    /* Remove a translação no disabled */
 }
 
 .action-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    /* APLICADO: Brilho intenso no hover */
-    box-shadow: 0 0 10px #E94560, 0 0 20px #E94560, 0 0 30px rgba(233, 69, 96, 0.4);
-    text-shadow: 0 0 8px #FFFFFF, 0 0 15px #E94560;
+    transform: translateY(-4px);
+    /* Animação mais pronunciada no hover */
+    box-shadow: 0 0 15px #E94560, 0 0 30px #E94560, 0 0 45px rgba(233, 69, 96, 0.6);
+    /* Brilho intenso */
+    text-shadow: 0 0 10px #FFFFFF, 0 0 20px #E94560;
+    /* Sombra de texto mais vibrante */
 }
 
 .reset-button {
-    background: #00C9A7;
-    /* Um verde um pouco diferente para distinguir do primário */
+    background: #1A1A2E;
+    /* Fundo mais escuro */
+    color: #00FFD1;
+    /* Texto neon */
+    border: 2px solid #00FFD1;
+    /* Borda neon */
+    padding: 0.9rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 220px;
+    text-align: center;
+    text-shadow: 0 0 5px #00FFD1;
+    /* Sombra de texto neon sutil */
+    box-shadow: 0 0 10px rgba(0, 255, 209, 0.4);
+    /* Brilho neon sutil */
+}
+
+.reset-button:hover:not(:disabled) {
+    transform: translateY(-4px);
+    /* Animação mais pronunciada no hover */
+    background: #00FFD1;
+    /* Fundo neon no hover */
     color: #1A1A2E;
+    /* Texto escuro no hover */
+    box-shadow: 0 0 15px #00FFD1, 0 0 30px #00FFD1, 0 0 45px rgba(0, 255, 209, 0.6);
+    /* Brilho intenso */
+    text-shadow: none;
+    /* Remove a sombra de texto no hover */
+}
+
+/* Section de Autoplay */
+.autoplay-section {
+    background: #0F3460;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 550px;
+    /* Aumentei para acomodar melhor os controles */
+    text-align: center;
+    color: #E5E5E5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.autoplay-section h2 {
+    color: #FFD700;
+    /* Cor dourada para o título do autoplay */
+    font-size: 2rem;
+    text-shadow: 0 0 8px #FFD700;
+    margin-bottom: 1rem;
+}
+
+.autoplay-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: center;
+}
+
+.autoplay-config {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
+}
+
+.autoplay-label {
+    font-size: 1.1rem;
+    color: #A8DADC;
+    min-width: 60px;
+    /* Para alinhar o texto */
+    text-align: right;
+}
+
+.autoplay-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #2A4D7C;
+    outline: none;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+.autoplay-slider:hover {
+    opacity: 1;
+}
+
+.autoplay-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00FFD1;
+    cursor: pointer;
+    box-shadow: 0 0 8px #00FFD1;
+}
+
+.autoplay-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00FFD1;
+    cursor: pointer;
+    box-shadow: 0 0 8px #00FFD1;
+}
+
+.autoplay-value {
+    font-size: 1.2rem;
+    color: #FFA500;
+    /* Laranja */
+    font-weight: bold;
+    min-width: 40px;
+    /* Para alinhar o número */
+    text-align: left;
+}
+
+.autoplay-speed-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E94560;
+    /* Cor off */
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #00FFD1;
+    /* Cor on */
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #00FFD1;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.speed-label {
+    font-size: 1.1rem;
+    color: #A8DADC;
+}
+
+.autoplay-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.auto-play-button,
+.stop-auto-play-button {
+    flex: 1;
+    max-width: 200px;
     padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
     border-radius: 8px;
-    border: none;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    /* Manter a transição para suavizar o efeito hover */
-    width: 100%;
-    max-width: 200px;
-    text-align: center;
-    /* REMOVIDO: Efeito Neon normal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.reset-button:hover {
-    transform: translateY(-2px);
-    background: #00FFD1;
-    /* Cor mais brilhante no hover */
-    /* APLICADO: Brilho intenso no hover */
-    box-shadow: 0 0 10px #00FFD1, 0 0 20px #00FFD1, 0 0 30px rgba(0, 255, 209, 0.4);
-    text-shadow: 0 0 8px #1A1A2E, 0 0 15px #00FFD1;
+.auto-play-button.play-button {
+    background-color: #00FFD1;
+    color: #1A1A2E;
+    border: 2px solid #00FFD1;
+    box-shadow: 0 0 10px rgba(0, 255, 209, 0.4);
+    text-shadow: 0 0 5px #1A1A2E;
 }
+
+.auto-play-button.play-button:hover:not(:disabled) {
+    background-color: #1A1A2E;
+    color: #00FFD1;
+    box-shadow: 0 0 15px #00FFD1, 0 0 30px rgba(0, 255, 209, 0.6);
+    text-shadow: 0 0 10px #00FFD1;
+}
+
+.stop-auto-play-button.pause-button {
+    background-color: #E94560;
+    color: #FFFFFF;
+    border: 2px solid #E94560;
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
+    text-shadow: 0 0 5px #FFFFFF;
+}
+
+.stop-auto-play-button.pause-button:hover:not(:disabled) {
+    background-color: #1A1A2E;
+    color: #E94560;
+    box-shadow: 0 0 15px #E94560, 0 0 30px rgba(233, 69, 96, 0.6);
+    text-shadow: 0 0 10px #E94560;
+}
+
+.auto-play-button:disabled,
+.stop-auto-play-button:disabled {
+    background: #3A121E;
+    color: #A8DADC;
+    cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
+    transform: none;
+}
+
+.autoplay-status {
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    color: #FFA500;
+    font-weight: bold;
+    text-shadow: 0 0 8px #FFA500;
+}
+
 
 /* Container de conteúdo (gráficos e tabelas) */
 .content-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 2rem;
+    /* Aumentei o gap */
     width: 100%;
     max-width: 1000px;
+    /* Mantém a largura consistente */
     justify-content: center;
+    /* Centraliza os cards */
     align-items: flex-start;
     padding: 0 1rem;
     box-sizing: border-box;
@@ -217,49 +527,54 @@ body {
 .chart-card {
     background: #0F3460;
     border-radius: 12px;
-    padding: 1.5rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-    /* Manter transição para o translateY */
+    padding: 1.8rem;
+    /* Aumentei o padding */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    /* Sombra mais forte */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
     flex: 1;
-    min-width: 300px;
-    max-width: 450px;
+    min-width: 320px;
+    /* Aumentei o min-width para melhor visualização do gráfico */
+    max-width: 48%;
+    /* Para permitir dois por linha em telas maiores */
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .chart-card:hover {
-    transform: translateY(-2px);
-    /* REMOVIDO: Efeito Neon no hover do card, manter apenas o translateY */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    /* Sombra mais escura no hover, não neon */
+    transform: translateY(-5px);
+    /* Animação mais pronunciada */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    /* Sombra mais escura e intensa */
 }
 
 .chart-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    /* Aumentei o tamanho do título */
     color: #E94560;
-    /* Cor vermelha para os títulos dos cards */
-    margin-bottom: 1rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    margin-bottom: 1.2rem;
+    text-shadow: 0 0 8px #E94560;
+    /* Sombra de texto neon */
 }
 
 /* Card de tabela */
 .table-card {
     background: #0F3460;
     border-radius: 12px;
-    padding: 1.5rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-    /* Manter transição para o translateY */
+    padding: 1.8rem;
+    /* Aumentei o padding */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    /* Sombra mais forte */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
     flex: 1;
-    min-width: 0;
-    max-width: 1000px;
+    min-width: 320px;
+    max-width: 100%;
+    /* Pode ocupar toda a largura se necessário */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -268,19 +583,17 @@ body {
 }
 
 .table-card:hover {
-    transform: translateY(-2px);
-    /* REMOVIDO: Efeito Neon no hover do card, manter apenas o translateY */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    /* Sombra mais escura no hover, não neon */
+    transform: translateY(-5px);
+    /* Animação mais pronunciada */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    /* Sombra mais escura e intensa */
 }
 
 .table-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: #E94560;
-    margin-bottom: 1rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    margin-bottom: 1.2rem;
+    text-shadow: 0 0 8px #E94560;
 }
 
 /* Tabela */
@@ -290,16 +603,19 @@ body {
     border-collapse: separate;
     border-spacing: 0;
     background: #16213E;
-    /* Cor de fundo da tabela mais escura */
-    border-radius: 8px;
+    border-radius: 10px;
+    /* Mais arredondado */
     overflow: hidden;
-    /* REMOVIDO: Efeito Neon normal. Apenas sombra padrão. */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    /* Sombra sutil para a tabela */
+    margin-top: 1rem;
+    /* Espaço acima da tabela */
 }
 
 .result-table th,
 .result-table td {
-    padding: 1rem;
+    padding: 1.2rem;
+    /* Mais padding */
     text-align: center;
     color: #A8DADC;
     border-bottom: 1px solid #2A4D7C;
@@ -307,29 +623,28 @@ body {
     word-break: break-word;
     white-space: normal;
     min-width: 100px;
+    font-size: 1rem;
+    /* Ajustei o tamanho da fonte */
 }
 
 .result-table th {
     background: #E94560;
     color: #FFFFFF;
-    font-weight: 600;
+    font-weight: 700;
+    /* Mais negrito */
     text-transform: uppercase;
-    font-size: 0.9rem;
-    padding: 1.2rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor e sombra padrão. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
-    box-shadow: none;
-    /* Remove a sombra interna */
+    font-size: 1rem;
+    /* Aumentei o tamanho da fonte */
+    padding: 1.5rem;
+    /* Mais padding no header da tabela */
+    text-shadow: 0 0 5px #FFFFFF;
 }
 
 .result-table tr:hover {
     background: #2A4D7C;
-    /* Fundo mais escuro no hover da linha */
     color: #00FFD1;
-    /* Texto com cor neon no hover */
-    text-shadow: 0 0 3px #00FFD1;
-    /* APLICADO: Brilho subtil no texto da linha hover */
+    text-shadow: 0 0 5px #00FFD1;
+    /* Brilho neon mais forte no texto da linha hover */
 }
 
 .result-table tr:last-child td {
@@ -337,16 +652,17 @@ body {
 }
 
 .total-spins {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    /* Mais espaço acima */
     color: #A8DADC;
     text-align: center;
-    font-size: 1rem;
-    /* REMOVIDO: Efeito Neon normal. Apenas cor. */
-    text-shadow: none;
-    /* Garante que não há sombra de texto por padrão */
+    font-size: 1.2rem;
+    /* Tamanho da fonte maior */
+    font-weight: 500;
+    text-shadow: 0 0 3px #A8DADC;
 }
 
-/* Responsividade (mantida como está) */
+/* Responsividade */
 @media (max-width: 1024px) {
     .content-container {
         flex-direction: column;
@@ -356,30 +672,43 @@ body {
     .chart-card,
     .table-card {
         max-width: 100%;
+        /* Permite que ocupem a largura total */
         width: 100%;
     }
 }
 
 @media (max-width: 768px) {
     .main-header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
     }
 
     .chart-card,
     .table-card {
-        padding: 1.2rem;
+        padding: 1.5rem;
     }
 
     .result-table th,
     .result-table td {
-        padding: 0.8rem;
-        font-size: 0.85rem;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .autoplay-section {
+        padding: 1.5rem;
+    }
+
+    .autoplay-section h2 {
+        font-size: 1.8rem;
     }
 }
 
 @media (max-width: 480px) {
     .main-header h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .subtitle {
@@ -388,7 +717,7 @@ body {
 
     .chart-card,
     .table-card {
-        padding: 1rem;
+        padding: 1.2rem;
         min-width: 0;
         max-width: 100%;
         width: 100%;
@@ -397,38 +726,64 @@ body {
     .action-button,
     .reset-button,
     .nav-button {
-        padding: 0.6rem 1rem;
+        padding: 0.7rem 1.2rem;
         max-width: 100%;
+        font-size: 1rem;
     }
 
     .result-table th,
     .result-table td {
-        padding: 0.6rem;
-        font-size: 0.75rem;
-        min-width: 80px;
+        padding: 0.8rem;
+        font-size: 0.8rem;
+        min-width: 60px;
+        /* Reduzi o min-width para telas muito pequenas */
+    }
+
+    .autoplay-section {
+        padding: 1rem;
+    }
+
+    .autoplay-config {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .autoplay-label {
+        text-align: center;
+        min-width: auto;
+    }
+
+    .autoplay-value {
+        text-align: center;
+        min-width: auto;
     }
 }
 
+/* Footer - Sem alterações grandes, mas garanti que não há conflitos */
 footer {
-  text-align: center;
-  padding: 20px 0;
-  background-color: transparent; /* ou usa uma cor de fundo, se quiseres */
-  font-size: 0.95rem;
-  color: #ccc;
+    text-align: center;
+    padding: 20px 0;
+    background-color: transparent;
+    font-size: 0.95rem;
+    color: #ccc;
+    width: 100%;
+    /* Garante que o footer ocupe toda a largura */
+    margin-top: auto;
+    /* Empurra o footer para o final da página */
 }
 
 footer p {
-  margin: 0;
+    margin: 0;
 }
 
 footer a {
-  color: #a259ff; /* roxo suave, como na tua imagem */
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s, text-decoration 0.3s;
+    color: #a259ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s, text-decoration 0.3s;
 }
 
 footer a:hover {
-  color: #c792ff;
-  text-decoration: underline;
+    color: #c792ff;
+    text-decoration: underline;
 }
