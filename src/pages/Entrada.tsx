@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react'; 
+import { useEffect } from 'react'; // Importa useEffect
 import './Entrada.css';
+
 const Entrada = () => {
+    // Adiciona e remove uma classe do body quando o componente é montado/desmontado
     useEffect(() => {
-        document.body.classList.add('entrada-page-body'); 
+        document.body.classList.add('entrada-page-body'); // Adiciona a classe
         return () => {
-            document.body.classList.remove('entrada-page-body'); 
+            document.body.classList.remove('entrada-page-body'); // Remove a classe ao sair da página
         };
-    }, []); 
+    }, []); // Array de dependências vazio para correr apenas uma vez na montagem
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -15,7 +18,7 @@ const Entrada = () => {
             transition={{ duration: 0.8 }}
             className="page-container"
         >
-            {}
+            {/* Cabeçalho */}
             <motion.header
                 className="main-header"
                 initial={{ y: -20 }}
@@ -24,9 +27,10 @@ const Entrada = () => {
                 <h1>Prémio Pedro de Matos 2025</h1>
                 <p className="subtitle">Projeto de Probabilidades Matemáticas</p>
             </motion.header>
-            {}
+
+            {/* Conteúdo Principal */}
             <div className="content-grid">
-                {}
+                {/* Card do Projeto */}
                 <motion.div
                     className="content-card"
                     initial={{ scale: 0.95 }}
@@ -40,7 +44,8 @@ const Entrada = () => {
                         conceitos complexos mais acessíveis através da prática.
                     </p>
                 </motion.div>
-                {}
+
+                {/* Card do Grupo */}
                 <motion.div
                     className="content-card"
                     initial={{ scale: 0.95 }}
@@ -53,7 +58,8 @@ const Entrada = () => {
                         Procuramos sempre o melhor para o nosso projeto, sempre com a aprovação da nossa professora orientadora.
                     </p>
                 </motion.div>
-                {}
+
+                {/* Card do Prêmio */}
                 <motion.div
                     className="content-card"
                     initial={{ scale: 0.95 }}
@@ -68,7 +74,8 @@ const Entrada = () => {
                     </p>
                 </motion.div>
             </div>
-            {}
+
+            {/* Navegação para Jogos */}
             <motion.nav
                 className="games-nav"
                 initial={{ opacity: 0 }}
@@ -103,4 +110,5 @@ const Entrada = () => {
         </motion.div>
     );
 };
+
 export default Entrada;
