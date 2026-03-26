@@ -9,7 +9,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Le
 const DICE_IMAGES: { [key: number]: string } = {
     1: '/images/dice-1.png',
     2: '/images/dice-2.png',
-    3: '/images/dice-3.png', // Corrected image path for 3, assuming you have it. If not, please adjust.
+    3: '/images/dice-3.png',
     4: '/images/dice-4.png',
     5: '/images/dice-5.png',
     6: '/images/dice-6.png',
@@ -21,7 +21,6 @@ const Dados: React.FC = () => {
     const [numeroAtual, setNumeroAtual] = useState<number | null>(null);
     const [displayNumero, setDisplayNumero] = useState<number | null>(null);
 
-    // ESTADOS E REFS PARA AUTO PLAY
     const [isAutoPlaying, setIsAutoPlaying] = useState(false);
     const [autoPlayRoundsConfig, setAutoPlayRoundsConfig] = useState<number>(10);
     const [remainingAutoPlayRounds, setRemainingAutoPlayRounds] = useState(0);
@@ -31,17 +30,16 @@ const Dados: React.FC = () => {
     const rollSound = useRef(new Audio('/sounds/dice_roll.wav'));
 
     const playSound = useCallback((audioElement: HTMLAudioElement) => {
-        if (!isFastAutoPlay) { // Only play sound if not in fast mode
+        if (!isFastAutoPlay) {
             audioElement.currentTime = 0;
             audioElement.play().catch(e => console.error("Erro ao tocar som:", e));
         }
     }, [isFastAutoPlay]);
 
     const lancarDado = useCallback(() => {
-        if (lancando) return; // Prevent multiple rolls if already rolling
+        if (lancando) return;
 
         setLancando(true);
-        // Do NOT nullify numeroAtual/displayNumero immediately, let them show the previous result
         playSound(rollSound.current);
 
         const rollDuration = isFastAutoPlay ? 50 : 1200;
@@ -53,12 +51,11 @@ const Dados: React.FC = () => {
             animationInterval = setInterval(() => {
                 setDisplayNumero(Math.floor(Math.random() * 6) + 1);
                 rollCount++;
-                if (rollCount > 10) { // Enough rolls for visual effect
+                if (rollCount > 10) {
                     clearInterval(animationInterval!);
                 }
             }, animationIntervalDuration);
         } else {
-            // For fast mode, update display number directly without animation frames
             setDisplayNumero(Math.floor(Math.random() * 6) + 1);
         }
 
@@ -69,13 +66,12 @@ const Dados: React.FC = () => {
 
             const resultado = Math.floor(Math.random() * 6) + 1;
             setNumeroAtual(resultado);
-            setDisplayNumero(resultado); // Ensure final number is displayed
+            setDisplayNumero(resultado);
             setResultados((prev) => [...prev, resultado]);
             setLancando(false);
         }, rollDuration);
     }, [lancando, playSound, rollSound, isFastAutoPlay]);
 
-    // LÓGICA DO AUTO PLAY PARA DADOS
     const iniciarAutoPlay = useCallback(() => {
         if (isAutoPlaying) return;
 
@@ -86,7 +82,6 @@ const Dados: React.FC = () => {
 
         setRemainingAutoPlayRounds(autoPlayRoundsConfig);
         setIsAutoPlaying(true);
-        // Start the first roll immediately when autoplay starts, if not already rolling
         if (!lancando) {
             lancarDado();
         }
@@ -102,7 +97,7 @@ const Dados: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const intervalSpeed = isFastAutoPlay ? 10 : 1500; // Even faster for fast mode: 10ms
+        const intervalSpeed = isFastAutoPlay ? 10 : 1500;
 
         if (isAutoPlaying) {
             if (remainingAutoPlayRounds > 0 && !lancando) {
@@ -110,7 +105,7 @@ const Dados: React.FC = () => {
                     lancarDado();
                     setRemainingAutoPlayRounds(prev => prev - 1);
                 }, intervalSpeed);
-            } else if (remainingAutoPlayRounds === 0) { // If rounds are done
+            } else if (remainingAutoPlayRounds === 0) {
                 pararAutoPlay();
             }
         }
@@ -185,12 +180,10 @@ const Dados: React.FC = () => {
                     {!displayNumero && lancando && !isFastAutoPlay && (
                         <div className="rolling-text">A rolar...</div>
                     )}
-                    {/* Feedback visual para modo rápido se o dado não estiver visível */}
                      {!displayNumero && lancando && isFastAutoPlay && (
                         <div className="fast-rolling-text">Calculando...</div>
                     )}
                 </div>
-                {/* Always show the last result message, update content */}
                 <div className="last-result">
                     Último resultado: <strong>{numeroAtual !== null ? numeroAtual : 'N/A'}</strong>
                 </div>
@@ -251,7 +244,6 @@ const Dados: React.FC = () => {
                             <button
                                 className="action-button stop-auto-play-button pause-button"
                                 onClick={pararAutoPlay}
-                                // DO NOT disable if isFastAutoPlay is true
                                 disabled={lancando && !isFastAutoPlay}
                                 title="Parar Auto Play"
                             >

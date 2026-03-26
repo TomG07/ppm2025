@@ -24,7 +24,6 @@ export default function Roleta() {
     const [girando, setGirando] = useState(false);
     const [animandoPonteiro, setAnimandoPonteiro] = useState(false);
 
-    // ESTADOS E REFS PARA AUTO PLAY
     const [isAutoPlaying, setIsAutoPlaying] = useState(false);
     const [autoPlayRoundsConfig, setAutoPlayRoundsConfig] = useState<number>(5);
     const [remainingAutoPlayRounds, setRemainingAutoPlayRounds] = useState(0);
@@ -44,7 +43,6 @@ export default function Roleta() {
         if (girando) return;
 
         setGirando(true);
-        // Do NOT nullify resultadoCor immediately, let it show the previous result
         setAnimandoPonteiro(false);
 
         playSound(spinAudio.current);
@@ -58,7 +56,6 @@ export default function Roleta() {
 
         const voltasCompletasAnimacao = 5;
 
-        // Ensure rotation always moves forward for visual effect in normal mode
         let novoAnguloRotacao = anguloRotacao + (voltasCompletasAnimacao * 360) + anguloParaAlinharComPonteiro + (360 - (anguloRotacao % 360));
         if (novoAnguloRotacao <= anguloRotacao) {
             novoAnguloRotacao += 360;
@@ -70,8 +67,6 @@ export default function Roleta() {
         if (!isFastAutoPlay) {
             setAnguloRotacao(novoAnguloRotacao);
         } else {
-            // In fast mode, directly set the final angle for Chart.js to render correctly
-            // Chart.js handles its own rendering based on data, so just update the value
             setAnguloRotacao(anguloParaAlinharComPonteiro);
         }
 
@@ -94,7 +89,6 @@ export default function Roleta() {
         }, duracaoAnimacao);
     }, [girando, anguloRotacao, playSound, spinAudio, isFastAutoPlay]);
 
-    // LÓGICA DO AUTO PLAY PARA ROLETA
     const iniciarAutoPlay = useCallback(() => {
         if (isAutoPlaying) return;
 
@@ -105,7 +99,6 @@ export default function Roleta() {
 
         setRemainingAutoPlayRounds(autoPlayRoundsConfig);
         setIsAutoPlaying(true);
-        // Start the first spin immediately when autoplay starts, if not already spinning
         if (!girando) {
             girarRoleta();
         }
@@ -121,7 +114,7 @@ export default function Roleta() {
     }, []);
 
     useEffect(() => {
-        const intervalSpeed = isFastAutoPlay ? 10 : 3000; // Even faster for fast mode: 10ms
+        const intervalSpeed = isFastAutoPlay ? 10 : 3000;
 
         if (isAutoPlaying) {
             if (remainingAutoPlayRounds > 0 && !girando) {
@@ -129,7 +122,7 @@ export default function Roleta() {
                     girarRoleta();
                     setRemainingAutoPlayRounds(prev => prev - 1);
                 }, intervalSpeed);
-            } else if (remainingAutoPlayRounds === 0) { // If rounds are done
+            } else if (remainingAutoPlayRounds === 0) {
                 pararAutoPlay();
             }
         }
@@ -142,7 +135,6 @@ export default function Roleta() {
         };
     }, [isAutoPlaying, remainingAutoPlayRounds, girando, girarRoleta, pararAutoPlay, isFastAutoPlay]);
 
-
     const resetarRoleta = useCallback(() => {
         pararAutoPlay();
         setResultadoCor(null);
@@ -153,7 +145,6 @@ export default function Roleta() {
         spinAudio.current.pause();
         spinAudio.current.currentTime = 0;
     }, [pararAutoPlay, spinAudio]);
-
 
     const contarOcorrenciasCor = (corNome: string) => historicoCores.filter((c) => c === corNome).length;
 
@@ -224,21 +215,17 @@ export default function Roleta() {
             <div className="game-container-roleta">
                 <div
                     className="roleta-container"
-                    // Apply transition for normal speed, none for fast speed
                     style={{ transition: isFastAutoPlay ? 'none' : 'transform 2.5s ease-out' }}
                 >
                     <div
                         className="roleta"
-                        // Apply rotation transition only if spinning and not in fast mode
                         style={{ transform: `rotate(${anguloRotacao}deg)`, transition: girando && !isFastAutoPlay ? 'transform 2.5s ease-out' : 'none' }}
                     >
                         <Pie data={pieChartDataRoleta} options={pieChartOptionsRoleta} />
                     </div>
-                    {/* Ponteiro only visible in normal mode */}
                     {!isFastAutoPlay && <div className={`ponteiro ${animandoPonteiro ? 'animating' : ''}`}></div>}
                 </div>
 
-                {/* Always show the last result message, update content */}
                 <div className="last-result">
                     Cor sorteada: <strong style={{ color: resultadoCor ? segmentosRoleta.find(s => s.nome === resultadoCor)?.cor || '#FFF' : '#FFF' }}>
                         {resultadoCor !== null ? resultadoCor : 'N/A'}
@@ -301,7 +288,6 @@ export default function Roleta() {
                             <button
                                 className="action-button stop-auto-play-button pause-button"
                                 onClick={pararAutoPlay}
-                                // DO NOT disable if isFastAutoPlay is true
                                 disabled={girando && !isFastAutoPlay}
                                 title="Parar Auto Play"
                             >

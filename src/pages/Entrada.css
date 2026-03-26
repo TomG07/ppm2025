@@ -1,52 +1,33 @@
-/* Reset básico */
-/* Mantemos apenas os resets essenciais e genéricos */
 html,
 body {
     margin: 0;
     padding: 0;
-    /* Remover 'height: 100%;' aqui se outras páginas não precisarem */
-    /* Deixe 'height: 100%;' APENAS para .entrada-page-body se for só para esta página */
 }
 
 body {
     font-family: 'Inter', sans-serif;
     background-color: #1A1A2E;
-    /* Cor de fundo genérica, se quiser. Caso contrário, defina na classe específica. */
     color: #E5E5E5;
     line-height: 1.6;
 }
 
-/* ESTILOS ESPECÍFICOS PARA A PÁGINA ENTRADA */
 .entrada-page-body {
     height: 100%;
-    /* Essencial para a centralização vertical */
     display: flex;
     justify-content: center;
-    /* Centraliza horizontalmente o .page-container */
     align-items: center;
-    /* Centraliza verticalmente o .page-container */
     min-height: 100vh;
-    /* Garante que o body ocupa 100% da altura do viewport */
     overflow-y: auto;
-    /* Permite scroll no body se o conteúdo exceder a altura */
-    /* Define a cor de fundo aqui para ser específica desta página, se necessário */
     background-color: #1A1A2E;
 }
 
-
-/* Container principal */
-/* Prefixo com .entrada-page-body para garantir que só afeta esta página */
 .entrada-page-body .page-container {
     max-width: 1200px;
     padding: 20px;
-    /* Padding interno para o conteúdo */
     margin: 20px auto;
-    /* Adiciona margem vertical e centraliza horizontalmente */
     box-sizing: border-box;
-    /* Inclui padding e border no width/height */
 }
 
-/* Cabeçalho */
 .main-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -66,7 +47,6 @@ body {
     text-align: center;
 }
 
-/* Grid de conteúdo */
 .content-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -76,10 +56,8 @@ body {
     justify-content: center;
     align-items: start;
     margin-bottom: 2rem;
-    /* row-gap: 3rem; */
 }
 
-/* Cards de conteúdo */
 .content-card {
     background: #0F3460;
     border-radius: 12px;
@@ -110,7 +88,6 @@ body {
     flex-grow: 1;
 }
 
-/* Navegação de jogos */
 .games-nav {
     display: flex;
     justify-content: center;
@@ -136,65 +113,48 @@ body {
     box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
 }
 
-/* Responsividade */
-
-/* Media Query para ecrãs médios (tablet em modo paisagem, laptops pequenos) */
 @media (max-width: 992px) {
     .content-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 }
 
-/* Media Query para ecrãs pequenos (smartphones, tablets em modo retrato) */
-/* Prefixo com .entrada-page-body para garantir que só afeta esta página */
 @media (max-height: 700px),
 (max-width: 768px) {
     .entrada-page-body {
         align-items: flex-start;
-        /* Alinha o conteúdo ao topo para permitir scroll */
         display: block;
-        /* Volta ao comportamento normal de bloco para o scroll */
         min-height: auto;
-        /* Remove min-height para evitar espaço em branco excessivo */
     }
-
     .entrada-page-body .page-container {
-        /* Prefixo com .entrada-page-body */
         width: 100%;
         margin: 0 auto;
         padding: 15px;
     }
-
     .main-header h1 {
         font-size: 2rem;
     }
-
     .content-grid {
         grid-template-columns: 1fr;
     }
-
     .content-grid {
         display: grid;
         grid-template-columns: 1fr;
         row-gap: 3rem;
     }
-
     .game-link {
         width: 100%;
         text-align: center;
     }
-
 }
 
 @media (max-width: 480px) {
     .main-header h1 {
         font-size: 1.8rem;
     }
-
     .subtitle {
         font-size: 1rem;
     }
-
     .content-card {
         padding: 1rem;
     }

@@ -1,4 +1,3 @@
-// src/services/logService.ts
 export interface LogData {
     path: string;
     timestamp: string;
