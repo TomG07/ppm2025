@@ -1,5 +1,3 @@
-/* src/components/Card/Card.css */
-
 .card-container {
     width: 80px;
     height: 110px;
@@ -54,10 +52,8 @@
 .card-front {
     background-color: #f0f0f0;
     color: #1A1A2E;
-    /* Cor de texto padrão para a frente da carta */
 }
 
-/* Layout das áreas da carta */
 .card-top-left,
 .card-bottom-right {
     display: flex;
@@ -82,7 +78,6 @@
     align-self: flex-end;
 }
 
-/* Estilos para os ícones e valores */
 .card-suit-icon {
     font-size: 1.3rem;
 }
@@ -98,17 +93,14 @@
 .card-value {
     font-weight: bold;
     font-size: 1rem;
-    /* Adicionada esta linha para remover qualquer sombra de texto */
     text-shadow: none;
 }
 
-/* Rotação para o canto inferior direito */
 .rotated-icon,
 .rotated-text {
     transform: rotate(180deg);
 }
 
-/* Estilo para as cartas na mão do jogador/dealer */
 .player-hand,
 .dealer-hand {
     display: flex;
@@ -118,7 +110,6 @@
     min-height: 110px;
 }
 
-/* Estilos para os títulos dentro das caixas de display */
 .game-display h3 {
     margin-top: 0;
     margin-bottom: 0.5rem;

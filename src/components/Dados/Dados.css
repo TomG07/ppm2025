@@ -1,61 +1,33 @@
-/* Importar estilos comuns (se necessário, ou garantir que Common.css está importado no componente) */
-/* @import '../../Common.css'; */
-
-/* Estilos específicos do componente Dados */
-
-/* Removi algumas propriedades repetidas que já estão em Common.css ou que serão sobrescritas */
 .game-container {
-    /* display: flex; */
-    /* Já em Common.css */
-    /* flex-direction: column; */
-    /* Já em Common.css */
-    /* align-items: center; */
-    /* Já em Common.css */
     gap: 1.5rem;
-    /* Ajustei o gap para ser consistente */
-    /* margin-bottom: 2rem; */
-    /* Já ajustado em Common.css */
     padding: 1.5rem;
-    /* Aumentei o padding */
     border-radius: 12px;
-    /* Mais arredondado */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    /* Sombra mais pronunciada */
     background-color: #0F3460;
-    /* Fundo para o container do jogo */
 }
 
 .dado {
     width: 180px;
-    /* Aumentei o tamanho do dado */
     height: 180px;
     background-color: #1A1A2E;
-    /* Cor de fundo do dado */
     border: 4px solid #E94560;
     border-radius: 25px;
-    /* Mais arredondado */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3.5rem;
-    /* Tamanho da fonte maior */
     color: #FFFFFF;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    /* Sombra mais forte */
     cursor: pointer;
     overflow: hidden;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* Transição para o hover */
 }
 
 .dado:hover {
     transform: translateY(-5px) scale(1.02);
-    /* Leve elevação e escala no hover */
     box-shadow: 0 10px 25px rgba(233, 69, 96, 0.6);
-    /* Brilho neon mais forte no hover */
 }
-
 
 .dice-image {
     width: 90%;
@@ -67,19 +39,15 @@
 .dado.lancando {
     animation: girar 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     box-shadow: 0 10px 25px rgba(233, 69, 96, 0.8);
-    /* Brilho mais forte durante o lançamento */
 }
 
 @keyframes girar {
     0% {
         transform: rotateX(0deg) rotateY(0deg) scale(1);
     }
-
     50% {
         transform: rotateX(360deg) rotateY(360deg) scale(1.1);
-        /* Um pouco mais de escala */
     }
-
     100% {
         transform: rotateX(720deg) rotateY(720deg) scale(1);
     }
@@ -87,28 +55,19 @@
 
 .rolling-text,
 .fast-rolling-text {
-    /* Estilizei o fast-rolling-text também */
     position: absolute;
     color: #00FFD1;
     font-size: 1.8rem;
-    /* Tamanho maior */
     font-weight: bold;
     animation: pulse 1.5s infinite alternate;
     text-shadow: 0 0 10px #00FFD1;
-    /* Sombra neon para o texto */
 }
 
 @keyframes pulse {
     0% {
         opacity: 0.6;
     }
-
     100% {
         opacity: 1;
     }
 }
-
-/* Os estilos para .last-result, .action-buttons, .action-button, .reset-button, .content-container,
-.chart-card, .table-card, h2, .result-table, th, td, .total-spins estão agora primariamente em Common.css.
-Se quiser sobrescrever algum deles especificamente para Dados.css, pode fazê-lo aqui.
-No entanto, os estilos de Common.css já são bem abrangentes. */

@@ -1,62 +1,42 @@
-/* Importar estilos comuns (se necessário, ou garantir que Common.css está importado no componente) */
-/* @import '../../Common.css'; */
-
-/* Estilos específicos do componente Roleta */
-
-/* O game-container-roleta já está definido em Common.css para centralização */
-
 .roleta-container {
     width: 320px;
-    /* Ligeiramente maior */
     height: 320px;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-    /* Sombra mais pronunciada */
     background-color: #1A1A2E;
     border: 5px solid #E94560;
-    /* Borda chamativa */
 }
 
 .roleta {
     width: 100%;
     height: 100%;
-    /* Transition handle in JS, but ensure default if not spinning for smooth initial load */
     transition: transform 0s ease-out;
-    /* Define uma transição padrão para evitar um "pop" inicial */
 }
 
 .ponteiro {
     width: 0;
     height: 0;
     border-left: 22px solid transparent;
-    /* Ligeiramente maior */
     border-right: 22px solid transparent;
     border-top: 35px solid #00FFD1;
-    /* Cor neon para o ponteiro */
     position: absolute;
     top: -18px;
-    /* Ajuste a posição */
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     transition: transform 0.2s ease-out;
     filter: drop-shadow(0 0 8px #00FFD1);
-    /* Efeito de brilho neon para o ponteiro */
 }
 
-/* Animação para o ponteiro */
 @keyframes pointerBounce {
     0% {
         transform: translateX(-50%) translateY(0);
     }
-
     50% {
         transform: translateX(-50%) translateY(-7px);
-        /* Salto maior */
     }
-
     100% {
         transform: translateX(-50%) translateY(0);
     }
@@ -64,14 +44,9 @@
 
 .ponteiro.animating {
     animation: pointerBounce 0.5s ease-out;
-    /* Duração da animação do bounce */
 }
-
-/* O .last-result já está em Common.css */
 
 .roleta canvas {
     width: 100% !important;
     height: 100% !important;
 }
-
-/* O .action-buttons .reset-button está agora primariamente em Common.css */
